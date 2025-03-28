@@ -8,11 +8,12 @@ import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
 import spotlightjs from '@spotlightjs/astro';
 import playformCompress from '@playform/compress';
+import playformInline from '@playform/inline';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'http://localhost:4321',
-  integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformCompress()],
+  integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformCompress(), playformInline()],
   vite: {
     plugins: [tailwindcss()]
   },

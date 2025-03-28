@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 import svelte from '@astrojs/svelte';
 
@@ -16,6 +16,7 @@ import spotlightjs from '@spotlightjs/astro';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'http://localhost:4321',
   integrations: [
     svelte(),
     mdx(),
@@ -28,5 +29,11 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  adapter: vercel()
+  adapter: vercel(),
+
+  env: {
+    schema: {
+      SITE_NAME: envField.string({ context: 'client', access: 'public' }),
+    }
+  }
 });

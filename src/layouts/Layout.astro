@@ -1,20 +1,38 @@
 ---
-import { SITE_NAME } from "astro:env/client";
+import { SITE_NAME, SITE_DESCRIPTION } from "astro:env/client";
+import { SEO } from "astro-seo";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{SITE_NAME}</title>
-    <link
-      rel="alternate"
-      type="application/rss+xml"
+    <SEO
       title={SITE_NAME}
-      href={new URL("rss.xml", Astro.site)}
+      description={SITE_DESCRIPTION}
+      openGraph={{
+        basic: {
+          title: SITE_NAME,
+          type: "website",
+          image: "/favicon.svg",
+        },
+      }}
+      twitter={{
+        card: "summary_large_image",
+        creator: "@MohamadAdithya",
+        title: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        image: "/favicon.svg",
+      }}
+      extend={{
+        link: [
+          {
+            rel: "alternate",
+            type: "application/rss+xml",
+            title: `${SITE_NAME} RSS Feed`,
+            href: new URL("rss.xml", Astro.site).href,
+          },
+        ],
+      }}
     />
   </head>
   <body>

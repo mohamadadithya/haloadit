@@ -34,6 +34,7 @@ export default defineConfig({
   env: {
     schema: {
       SITE_NAME: envField.string({ context: 'client', access: 'public' }),
+      SITE_DESCRIPTION: envField.string({ context: 'client', access: 'public' }),
     }
   }
 });

@@ -6,7 +6,7 @@ export async function GET({ site }: { site: string }) {
   const posts = await getCollection("posts");
 
   return rss({
-    title: SITE_NAME,
+    title: `${SITE_NAME} | RSS Feed`,
     description: SITE_DESCRIPTION,
     site,
     trailingSlash: false,
@@ -20,5 +20,6 @@ export async function GET({ site }: { site: string }) {
       };
     }),
     customData: `<language>id-ID</language>`,
+    stylesheet: "/styles/rss.xsl",
   });
 }

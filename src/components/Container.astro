@@ -1,0 +1,13 @@
+---
+import { cn } from "@helpers";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class=`container mx-auto ${cn('px-5', className)}`>
+  <slot />
+</div>

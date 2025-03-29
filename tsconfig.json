@@ -7,7 +7,9 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
-      "@site-config": ["src/site.config.ts"]
+      "@layouts/*": ["src/layouts/*"],
+      "@site-config": ["src/site.config.ts"],
+      "@helpers": ["src/helpers.ts"]
     }
   }
 }

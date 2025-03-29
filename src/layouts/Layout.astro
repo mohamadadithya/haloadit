@@ -2,11 +2,16 @@
 import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
+import "../styles/global.css";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
     <SEO
       title={siteConfig.name}
       description={siteConfig.description}
@@ -44,7 +49,9 @@ import siteConfig from "@site-config";
     <GoogleAnalytics />
   </head>
   <body>
-    <slot />
+    <main>
+      <slot />
+    </main>
   </body>
 </html>
 

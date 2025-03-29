@@ -1,3 +1,14 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: emerald, forest --default --prefersdark, forest;
+}
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --color-muted: var(--color-gray-400);
+}
+
+@utility text-muted {
+  color: var(--color-gray-400);
+}

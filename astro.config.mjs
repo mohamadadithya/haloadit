@@ -10,6 +10,7 @@ import spotlightjs from '@spotlightjs/astro';
 import playformCompress from '@playform/compress';
 import playformInline from '@playform/inline';
 import partytown from '@astrojs/partytown';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,10 @@ export default defineConfig({
   integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformCompress(), playformInline(), partytown({
     config: {
       forward: ['dataLayer.push', 'gtag']
+    }
+  }), icon({
+    include: {
+      mdi: ["*"]
     }
   })],
   vite: {

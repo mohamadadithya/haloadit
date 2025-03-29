@@ -1,18 +1,29 @@
 ---
 import Container from "@components/Container.astro";
 import Layout from "@layouts/Layout.astro";
+import siteConfig from "@site-config";
+import mainHero from "@assets/heroes/main-1.webp";
+import { Image } from "astro:assets";
 ---
 
 <Layout>
-  <section class="min-h-dvh grid place-items-center">
-    <Container class="text-center">
-      <div class="space-y-3 md:space-y-5">
-        <h1 class="text-3xl md:text-5xl font-bold">Under Construction</h1>
-        <p class="text-balance">
-          This page is under construction, please come back later.
-        </p>
+  <section class="py-10">
+    <Container>
+      <div class="flex items-center gap-5 flex-col">
+        <Image
+          class="aspect-square size-38 rounded-full"
+          src={mainHero}
+          alt="Main Hero"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="space-y-1.5 text-center md:text-left">
+          <h1 class="text-3xl font-bold">{siteConfig.author}</h1>
+          <p class="text-balance text-muted">
+            Frontend Developer, UI/UX Designer, Tech Enthusiast.
+          </p>
+        </div>
       </div>
-      <p class="text-gray-400 mt-4">{Astro.site}</p>
     </Container>
   </section>
 </Layout>

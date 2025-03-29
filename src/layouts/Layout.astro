@@ -1,12 +1,14 @@
 ---
+import "../styles/global.css";
 import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
-import "../styles/global.css";
+import Header from "@components/Header.astro";
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="forest">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -47,10 +49,16 @@ import "../styles/global.css";
       }}
     />
     <GoogleAnalytics />
+    <GoogleFontsOptimizer
+      url="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap"
+    />
   </head>
   <body>
-    <main>
-      <slot />
+    <main class="font-inter">
+      <Header />
+      <div class="w-full max-w-5xl mx-auto">
+        <slot />
+      </div>
     </main>
   </body>
 </html>

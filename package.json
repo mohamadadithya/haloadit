@@ -26,5 +26,9 @@
     "svelte": "^5.25.3",
     "tailwindcss": "^4.0.17",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@astro-kits/google-analytics": "^0.1.0",
+    "@astrojs/partytown": "^2.1.4"
   }
 }

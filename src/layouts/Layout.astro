@@ -1,6 +1,7 @@
 ---
 import { SITE_NAME, SITE_DESCRIPTION } from "astro:env/client";
 import { SEO } from "astro-seo";
+import GoogleAnalytics from "@astro-kits/google-analytics";
 ---
 
 <!doctype html>
@@ -40,6 +41,7 @@ import { SEO } from "astro-seo";
         ],
       }}
     />
+    <GoogleAnalytics />
   </head>
   <body>
     <slot />

@@ -1,6 +1,6 @@
 ---
 import Container from "./Container.astro";
-import InboxDropdown from "./inbox-dropdown/Dropdown.svelte";
+import HeaderActions from "./HeaderActions.svelte";
 
 const mainLinks = [
   {
@@ -40,10 +40,10 @@ const mainLinks = [
           />
         </picture>
       </a>
-      <InboxDropdown client:visible />
+      <HeaderActions class="md:hidden" popoverId="inbox-panel-mobile" />
     </div>
     <nav>
-      <ul class="flex items-center gap-6">
+      <ul class="flex justify-center items-center gap-6">
         {
           mainLinks.map((link) => (
             <li>
@@ -53,5 +53,6 @@ const mainLinks = [
         }
       </ul>
     </nav>
+    <HeaderActions class="hidden md:flex" popoverId="inbox-panel" />
   </Container>
 </header>

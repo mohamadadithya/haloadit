@@ -1,21 +1,24 @@
-<script>
+<script lang="ts">
+  import { getContext } from "svelte";
   import DropdownItem from "./Item.svelte";
   import Mail from "@lucide/svelte/icons/mail";
+
+  const popoverId = getContext<string>("popoverId");
 </script>
 
 <button
   type="button"
   class="btn btn-outline"
-  popovertarget="inbox-panel"
+  popovertarget={popoverId}
   style="anchor-name:--inbox-anchor"
 >
   <Mail class="size-5" />
   Inbox
 </button>
 <div
-  class="dropdown dropdown-end menu w-64 max-h-96 rounded-box bg-base-100 shadow-sm"
   popover
-  id="inbox-panel"
+  class="dropdown dropdown-end menu w-64 max-h-96 rounded-box bg-base-100 shadow-sm"
+  id={popoverId}
   style="position-anchor:--inbox-anchor"
 >
   <button type="button" class="btn btn-sm btn-soft mb-2.5">

@@ -21,7 +21,8 @@ export default defineConfig({
     }
   }), icon({
     include: {
-      mdi: ["*"]
+      mdi: ["*"],
+      lucide: ["settings"]
     }
   })],
   vite: {

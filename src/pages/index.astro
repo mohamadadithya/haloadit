@@ -9,19 +9,23 @@ import { Image } from "astro:assets";
 <Layout>
   <section class="py-10">
     <Container>
-      <div class="flex items-center gap-5 flex-col">
-        <Image
-          class="aspect-square size-38 rounded-full"
-          src={mainHero}
-          alt="Main Hero"
-          loading="eager"
-          fetchpriority="high"
-        />
-        <div class="space-y-1.5 text-center md:text-left">
-          <h1 class="text-3xl font-bold">{siteConfig.author}</h1>
-          <p class="text-balance text-muted">
-            Frontend Developer, UI/UX Designer, Tech Enthusiast.
-          </p>
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center gap-6 flex-col md:flex-row">
+          <Image
+            class="aspect-square size-36 rounded-full"
+            src={mainHero}
+            alt="Main Hero"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="space-y-1.5 md:space-y-2.5 text-center md:text-left">
+            <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl">
+              {siteConfig.author}
+            </h1>
+            <p class="text-balance text-muted md:text-lg lg:text-xl">
+              Frontend Developer, UI/UX Designer, Tech Enthusiast.
+            </p>
+          </div>
         </div>
       </div>
     </Container>

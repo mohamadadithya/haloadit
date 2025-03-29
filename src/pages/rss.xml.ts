@@ -1,13 +1,13 @@
 import rss from "@astrojs/rss";
+import siteConfig from "@site-config";
 import { getCollection } from "astro:content";
-import { SITE_DESCRIPTION, SITE_NAME } from "astro:env/client";
 
 export async function GET({ site }: { site: string }) {
   const posts = await getCollection("posts");
 
   return rss({
-    title: `${SITE_NAME} | RSS Feed`,
-    description: SITE_DESCRIPTION,
+    title: `${siteConfig.name} | RSS Feed`,
+    description: siteConfig.description,
     site,
     trailingSlash: false,
     items: posts.map((post) => {

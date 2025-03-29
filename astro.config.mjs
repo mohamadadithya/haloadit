@@ -25,8 +25,7 @@ export default defineConfig({
   adapter: vercel(),
   env: {
     schema: {
-      SITE_NAME: envField.string({ context: 'client', access: 'public' }),
-      SITE_DESCRIPTION: envField.string({ context: 'client', access: 'public' }),
+      GA_ID: envField.string({ context: 'client', access: 'public' }),
     }
   }
 });

@@ -1,18 +1,18 @@
 ---
-import { SITE_NAME, SITE_DESCRIPTION } from "astro:env/client";
 import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
+import siteConfig from "@site-config";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <SEO
-      title={SITE_NAME}
-      description={SITE_DESCRIPTION}
+      title={siteConfig.name}
+      description={siteConfig.description}
       openGraph={{
         basic: {
-          title: SITE_NAME,
+          title: siteConfig.name,
           type: "website",
           image: "/favicon.svg",
         },
@@ -20,8 +20,8 @@ import GoogleAnalytics from "@astro-kits/google-analytics";
       twitter={{
         card: "summary_large_image",
         creator: "@MohamadAdithya",
-        title: SITE_NAME,
-        description: SITE_DESCRIPTION,
+        title: siteConfig.name,
+        description: siteConfig.description,
         image: "/favicon.svg",
       }}
       extend={{
@@ -29,7 +29,7 @@ import GoogleAnalytics from "@astro-kits/google-analytics";
           {
             rel: "alternate",
             type: "application/rss+xml",
-            title: `${SITE_NAME} RSS Feed`,
+            title: `${siteConfig.name} RSS Feed`,
             href: new URL("rss.xml", Astro.site).href,
           },
           {

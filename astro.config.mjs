@@ -13,7 +13,7 @@ import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'http://localhost:4321',
+  site: 'https://haloadit.com',
   integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformCompress(), playformInline(), partytown({
     config: {
       forward: ['dataLayer.push', 'gtag']

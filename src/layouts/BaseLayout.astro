@@ -1,5 +1,5 @@
 ---
-import { cn } from "@helpers";
+import Header from "@components/Header.astro";
 
 interface Props {
   class?: string;
@@ -8,6 +8,7 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class=`container mx-auto lg:max-w-5xl ${cn('px-5', className)}`>
+<div class={className} aria-label="Base Layout">
+  <Header />
   <slot />
 </div>

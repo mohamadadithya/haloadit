@@ -4,13 +4,17 @@
   themes: emerald, forest --default --prefersdark, forest;
 }
 
+@plugin "daisyui/theme" {
+  name: "forest";
+  default: true;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+}
+
 @theme {
   --font-inter: "Inter", sans-serif;
   --font-lora: "Lora", serif;
-  --color-muted: var(--color-gray-400);
+  --color-muted: var(--color-gray-700);
   --container-3.5xl: 53rem;
-}
-
-@utility text-muted {
-  color: var(--color-gray-400);
 }

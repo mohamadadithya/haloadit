@@ -1,0 +1,50 @@
+---
+import { Icon } from "astro-icon/components";
+
+const socialMedia = [
+  {
+    name: "GitHub",
+    href: "https://github.com/MohamadAdithya",
+    icon: "uil:github-alt",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/mohamadadithya/",
+    icon: "uil:linkedin-alt",
+  },
+  {
+    name: "Twitter",
+    href: "https://twitter.com/MohamadAdithya",
+    icon: "uil:twitter-alt",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/mohamadadithya/",
+    icon: "uil:instagram",
+  },
+  {
+    name: "RSS",
+    href: "/rss.xml",
+    icon: "uil:rss",
+  },
+];
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class=`flex items-center gap-5 ${className}`>
+  {
+    socialMedia.map((media) => (
+      <div class="tooltip tooltip-bottom" data-tip={media.name}>
+        <a href={media.href} target="_blank" rel="noopener noreferrer">
+          <span class="sr-only">{media.name}</span>
+          <Icon name={media.icon} class="size-8" />
+        </a>
+      </div>
+    ))
+  }
+</div>

@@ -6,7 +6,7 @@ import HeaderActions from "./HeaderActions.svelte";
 const mainLinks = [
   {
     label: "👱 Tentang",
-    href: "/about",
+    href: "/#about",
   },
   {
     label: "✍️ Tulisan",
@@ -28,7 +28,7 @@ const mainLinks = [
         <p class="text-2xl font-lora font-semibold">Halo Adit 👋</p>
         <p class="text-xs">by {siteConfig.author}</p>
       </a>
-      <HeaderActions class="md:hidden" popoverId="inbox-panel-mobile" />
+      <HeaderActions class="md:hidden" />
     </div>
     <nav>
       <ul class="flex justify-center items-center gap-6">
@@ -41,6 +41,6 @@ const mainLinks = [
         }
       </ul>
     </nav>
-    <HeaderActions class="hidden md:flex" popoverId="inbox-panel" />
+    <HeaderActions class="hidden md:flex" />
   </Container>
 </header>

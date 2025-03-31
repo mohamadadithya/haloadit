@@ -4,6 +4,7 @@ import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import { Schema } from "astro-seo-schema";
 ---
 
 <!doctype html>
@@ -45,6 +46,19 @@ import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
             href: new URL("sitemap-index.xml", Astro.site).href,
           },
         ],
+      }}
+    />
+    <Schema
+      item={{
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: siteConfig.name,
+        description: siteConfig.description,
+        url: siteConfig.origin,
+        author: {
+          "@type": "Person",
+          name: siteConfig.author,
+        },
       }}
     />
     <GoogleAnalytics />

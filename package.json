@@ -25,9 +25,13 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.17",
     "astro": "^5.5.5",
+    "astro-icon": "^1.1.5",
     "astro-seo": "^0.8.4",
+    "astro-seo-schema": "^5.0.0",
     "clsx": "^2.1.1",
     "daisyui": "^5.0.9",
+    "schema-dts": "^1.1.5",
+    "sharp": "^0.33.5",
     "svelte": "^5.25.3",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.17",
@@ -36,8 +40,6 @@
   "dependencies": {
     "@astro-kits/google-analytics": "^0.1.0",
     "@astrojs/partytown": "^2.1.4",
-    "astro-google-fonts-optimizer": "^0.2.2",
-    "astro-icon": "^1.1.5",
-    "sharp": "^0.33.5"
+    "astro-google-fonts-optimizer": "^0.2.2"
   }
 }

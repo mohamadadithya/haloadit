@@ -12,7 +12,7 @@
       </head>
       <body class="bg-gray-100 text-gray-900 p-6">
         <div class="max-w-3xl mx-auto">
-          <h1 class="text-2xl text-center md:text-left md:text-3xl font-semibold mb-6 text-balance">
+          <h1 class="text-2xl text-center md:text-left font-semibold mb-6 text-balance">
                 <xsl:value-of select="rss/channel/title"/>
           </h1>
           <ul class="space-y-4">

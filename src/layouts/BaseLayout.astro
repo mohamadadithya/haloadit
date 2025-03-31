@@ -10,5 +10,7 @@ const { class: className } = Astro.props;
 
 <div class={className} aria-label="Base Layout">
   <Header />
-  <slot />
+  <div class="py-10">
+    <slot />
+  </div>
 </div>

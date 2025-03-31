@@ -3,6 +3,11 @@ import { Icon } from "astro-icon/components";
 
 const socialMedia = [
   {
+    name: "Email",
+    href: "mailto:mohamadadithya@gmail.com",
+    icon: "uil:at",
+  },
+  {
     name: "GitHub",
     href: "https://github.com/MohamadAdithya",
     icon: "uil:github-alt",
@@ -36,7 +41,7 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class=`flex items-center gap-5 ${className}`>
+<div class=`flex items-center gap-5 flex-wrap ${className}`>
   {
     socialMedia.map((media) => (
       <div class="tooltip tooltip-bottom" data-tip={media.name}>

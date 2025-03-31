@@ -1,0 +1,37 @@
+---
+import Container from "@components/Container.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Layout from "@layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+
+const paragraphs = [
+  "Saya sangat suka membangun antarmuka web yang cepat, responsif, dan intuitif. Selain itu, saya juga berpengalaman dalam web design dan pengembangan aplikasi desktop, serta memastikan setiap produk fungsional dan nyaman digunakan.",
+  "Selalu mencari tantangan baru untuk terus belajar, beradaptasi, dan menghadirkan solusi yang efektif dan efisien🚀.",
+];
+
+const cvFileUrl =
+  "https://oobsgatmbpvrncgfqqjb.supabase.co/storage/v1/object/public/documents//Mohamad%20Adithya%20-%20CV.pdf";
+---
+
+<Layout>
+  <BaseLayout>
+    <Container>
+      <div class="space-y-6">
+        <h1 class="section-title">
+          Dari Baris Kode, <br />ke Pengalaman Digital
+        </h1>
+        {paragraphs.map((paragraph) => <p class="text-balance">{paragraph}</p>)}
+      </div>
+      <a
+        href={cvFileUrl}
+        download={cvFileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary mt-5"
+      >
+        Unduh atau Buka CV Saya
+        <Icon name="mdi:download" class="w-5 h-5 ml-2" />
+      </a>
+    </Container>
+  </BaseLayout>
+</Layout>

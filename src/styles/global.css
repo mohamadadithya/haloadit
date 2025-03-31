@@ -18,3 +18,7 @@
   --color-muted: var(--color-gray-700);
   --container-3.5xl: 53rem;
 }
+
+@utility section-title {
+  @apply text-2xl md:text-3xl lg:text-4xl font-lora font-semibold text-balance leading-normal;
+}

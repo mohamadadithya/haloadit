@@ -7,7 +7,7 @@ export async function GET({ site }: AstroConfig) {
   const posts = await getCollection("posts");
 
   return rss({
-    title: `${siteConfig.name} | RSS Feed`,
+    title: `${siteConfig.title} | RSS Feed`,
     description: siteConfig.description,
     site: site || siteConfig.origin,
     trailingSlash: false,

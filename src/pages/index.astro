@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import SocialMediaRow from "@components/SocialMediaRow.astro";
 import ScrollDownIcon from "@components/ScrollDownIcon.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import AboutSection from "@components/sections/About.astro";
 ---
 
 <Layout>
@@ -23,7 +24,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
               <p
                 class="uppercase text-primary tracking-wider font-semibold md:text-lg lg:text-xl"
               >
-                Hello, I'm {siteConfig.author}.
+                Halo, Saya {siteConfig.author}. 👋
               </p>
               <h1
                 class="text-3xl font-bold md:text-4xl lg:text-5xl leading-normal font-lora text-balance"
@@ -52,31 +53,6 @@ import BaseLayout from "@layouts/BaseLayout.astro";
     </Container>
   </section>
   <BaseLayout class="min-h-dvh">
-    <div class="py-10 min-h-96 grid place-items-center">
-      <Container>
-        <div class="space-y-6">
-          <h2
-            class="text-2xl md:text-3xl lg:text-4xl font-lora font-semibold text-balance"
-          >
-            Sangat senang berkenalan dengan-mu!
-          </h2>
-          <p>
-            Hai! Saya Mohamad Adithya dari Indonesia. Saya suka membangun
-            antarmuka web yang nggak cuma enak dilihat, tapi juga cepat,
-            intuitif, dan nyaman digunakan.
-          </p>
-          <p>
-            Dengan pengalaman lebih dari 5 tahun, saya selalu berusaha menulis
-            clean code, memastikan semuanya berjalan mulus dengan pengujian, dan
-            mengoptimalkan performa serta SEO agar web lebih ringan dan mudah
-            ditemukan. Saya percaya, teknologi yang baik adalah yang terasa
-            alami dan membantu tanpa disadari. 🚀
-          </p>
-        </div>
-        <button type="button" class="btn btn-primary mt-8"
-          >Kenalan Lebih Lanjut</button
-        >
-      </Container>
-    </div>
+    <AboutSection />
   </BaseLayout>
 </Layout>

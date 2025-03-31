@@ -14,11 +14,11 @@ import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <SEO
-      title={siteConfig.name}
+      title=`${siteConfig.title} — ${siteConfig.name}`
       description={siteConfig.description}
       openGraph={{
         basic: {
-          title: siteConfig.name,
+          title: siteConfig.title,
           type: "website",
           image: "/favicon.svg",
         },
@@ -26,7 +26,7 @@ import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
       twitter={{
         card: "summary_large_image",
         creator: "@MohamadAdithya",
-        title: siteConfig.name,
+        title: siteConfig.title,
         description: siteConfig.description,
         image: "/favicon.svg",
       }}
@@ -35,7 +35,7 @@ import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
           {
             rel: "alternate",
             type: "application/rss+xml",
-            title: `${siteConfig.name} RSS Feed`,
+            title: `${siteConfig.title} RSS Feed`,
             href: new URL("rss.xml", Astro.site).href,
           },
           {

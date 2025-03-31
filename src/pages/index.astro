@@ -8,9 +8,45 @@ import SocialMediaRow from "@components/SocialMediaRow.astro";
 import ScrollDownIcon from "@components/ScrollDownIcon.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import AboutSection from "@components/sections/About.astro";
+import { Schema } from "astro-seo-schema";
 ---
 
 <Layout>
+  <Schema
+    slot="head"
+    item={{
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: siteConfig.name,
+      description: siteConfig.description,
+      url: siteConfig.origin,
+    }}
+  />
+  <Schema
+    slot="head"
+    item={{
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: `${siteConfig.title} — ${siteConfig.name}`,
+      url: siteConfig.origin,
+      description: siteConfig.description,
+      author: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/about`,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.origin,
+      },
+      mainEntity: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/about`,
+      },
+    }}
+  />
   <section
     class="py-5 min-h-dvh grid place-items-center bg-gradient-to-b from-primary/20 relative"
   >

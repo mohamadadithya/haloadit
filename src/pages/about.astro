@@ -2,7 +2,9 @@
 import Container from "@components/Container.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
+import siteConfig from "@site-config";
 import { Icon } from "astro-icon/components";
+import { Schema } from "astro-seo-schema";
 
 const paragraphs = [
   "Saya sangat suka membangun antarmuka web yang cepat, responsif, dan intuitif. Selain itu, saya juga berpengalaman dalam web design dan pengembangan aplikasi desktop, serta memastikan setiap produk fungsional dan nyaman digunakan.",
@@ -14,6 +16,50 @@ const cvFileUrl =
 ---
 
 <Layout>
+  <Schema
+    slot="head"
+    item={{
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Dari Baris Kode, ke Pengalaman Digital",
+      description: "Perkenalan mengenai saya dan pengalaman saya",
+      url: Astro.url.toString(),
+      breadcrumb: {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Beranda",
+            item: siteConfig.origin,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Tentang Saya",
+            item: `${siteConfig.origin}/about`,
+          },
+        ],
+      },
+      about: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/about`,
+        description:
+          "Saya adalah seorang frontend developer yang selalu antusias dengan pengembangan web modern.",
+        jobTitle: "Frontend Developer",
+        worksFor: {
+          "@type": "Organization",
+          name: "PT. Yapindo Jaya Abadi",
+        },
+        sameAs: [
+          "https://github.com/mohamadadithya",
+          "https://twitter.com/MohamadAdithya",
+          "https://www.linkedin.com/in/mohamadadithya",
+        ],
+      },
+    }}
+  />
   <BaseLayout>
     <Container>
       <div class="space-y-6">

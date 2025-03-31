@@ -4,7 +4,6 @@ import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
-import { Schema } from "astro-seo-schema";
 ---
 
 <!doctype html>
@@ -48,19 +47,6 @@ import { Schema } from "astro-seo-schema";
         ],
       }}
     />
-    <Schema
-      item={{
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: siteConfig.name,
-        description: siteConfig.description,
-        url: siteConfig.origin,
-        author: {
-          "@type": "Person",
-          name: siteConfig.author,
-        },
-      }}
-    />
     <GoogleAnalytics />
     <GoogleFontsOptimizer
       url="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap"
@@ -68,6 +54,7 @@ import { Schema } from "astro-seo-schema";
     <GoogleFontsOptimizer
       url="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap"
     />
+    <slot name="head" />
   </head>
   <body>
     <main class="font-inter">

@@ -15,7 +15,7 @@
   <div class="lg:tooltip lg:tooltip-bottom" data-tip="Pengaturan">
     <button
       type="button"
-      class="btn btn-circle btn-outline"
+      class="btn btn-circle btn-soft btn-primary"
       aria-label="Settings"
     >
       <Settings class="size-5" />

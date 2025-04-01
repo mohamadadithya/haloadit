@@ -4,7 +4,7 @@
 </script>
 
 <div class="dropdown dropdown-end">
-  <div tabindex={0} role="button" class="btn btn-outline m-1">
+  <div tabindex={0} role="button" class="btn btn-soft btn-primary m-1">
     <Mail class="size-5" />
     Inbox
   </div>
@@ -13,7 +13,7 @@
     tabindex={0}
     class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm"
   >
-    <button type="button" class="btn btn-sm btn-soft mb-2.5">
+    <button type="button" class="btn btn-sm btn-soft btn-accent mb-2.5">
       Tandai telah dibaca semua
     </button>
     <ul>

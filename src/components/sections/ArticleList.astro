@@ -1,16 +1,32 @@
 ---
 import ArticleCard from "@components/article/ArticleCard.astro";
 import Container from "@components/Container.astro";
+import type { BlogPost } from "@contentful";
+import { contentfulClient } from '@contentful';
+
+const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost' });
+const posts = entries.items.map((item) => {
+  const { title, date, description, slug } = item.fields;
+
+  return {
+    title,
+    slug,
+    description,
+    date: new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }),
+  };
+});
+
+export type PostListItem = typeof posts[number];
 ---
 
 <div class="py-10 min-h-dvh" id="writing">
   <Container>
     <h2 class="section-title mb-6">Tulisan Terbaru</h2>
     <div class="space-y-6">
-      {Array.from({ length: 3 }, (_, i) => <ArticleCard />)}
-      <button type="button" class="btn btn-soft btn-primary"
+      {posts.map((post) => <ArticleCard post={post} />)}
+      <a href="/posts" class="btn btn-soft btn-primary"
         >Lihat tulisan lainnya
-      </button>
+      </a>
     </div>
   </Container>
 </div>

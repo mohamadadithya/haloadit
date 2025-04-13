@@ -6,22 +6,37 @@ interface Props {
   post: PostListItem
 }
 
-const { post: { title, description, slug, date } } = Astro.props;
+const { post: { title, description, slug, date, tags } } = Astro.props;
 ---
 
-<a
-  href=`/${slug}`
+<div
   aria-label="Article Card"
-  class="block group p-5 bg-base-200 rounded-xl hover:bg-primary/5 duration-300"
+  class="group p-5 bg-base-200 rounded-2xl"
 >
-  <p class="font-semibold mb-3 text-primary text-lg sm:text-xl md:text-2xl font-lora">
-    {title}
-  </p>
-  <p class="line-clamp-2">
-    {description}
-  </p>
-  <div class="flex items-center gap-2 mt-3 text-gray-400">
-    <Icon name="mdi:calendar" class="size-5" />
-    <p aria-label="Date" class="text-sm">{date}</p>
+  <div>
+    <a href={`/posts/${slug}`} class="font-semibold link link-hover text-primary text-lg sm:text-xl md:text-2xl font-lora">
+      {title}
+    </a>
+    <div class="mt-4 space-y-3">
+      <p class="line-clamp-2">
+        {description}
+      </p>
+      <div class="flex items-center gap-2 text-gray-400">
+        <Icon name="mdi:calendar" class="size-5" />
+        <p aria-label="Date" class="text-sm">{date}</p>
+      </div>
+    </div>
+    {tags && tags.length > 0 && (
+      <div class="flex items-center gap-2 mt-4">
+        {tags.map(({ sys: { id }}) => (
+          <a href={`/tags/${id}`} class="badge badge-soft hover:badge-primary">
+            #{id}
+          </a>
+        ))}
+      </div>
+    )}
   </div>
-</a>
+  <a href={`/posts/${slug}`} class="btn btn-outline btn-primary rounded-full mt-6">
+    Baca selengkapnya
+  </a>
+</div>

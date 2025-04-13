@@ -4,15 +4,24 @@ import Container from "@components/Container.astro";
 import type { BlogPost } from "@contentful";
 import { contentfulClient } from '@contentful';
 
-const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost' });
+interface Props {
+  limit?: number;
+}
+
+const { limit = 5 } = Astro.props;
+
+const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost', limit });
 const posts = entries.items.map((item) => {
-  const { title, date, description, slug } = item.fields;
+  const { fields: {
+    title, date, description, slug
+  }, metadata: { tags } } = item;
 
   return {
     title,
     slug,
     description,
-    date: new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }),
+    tags,
+    date: new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' })
   };
 });
 

@@ -1,6 +1,7 @@
 ---
 import type { PostListItem } from "@components/sections/ArticleList.astro";
 import { Icon } from "astro-icon/components";
+import TagList from "./TagList.astro";
 
 interface Props {
   post: PostListItem
@@ -14,7 +15,7 @@ const { post: { title, description, slug, date, tags } } = Astro.props;
   class="group p-5 bg-base-200 rounded-2xl"
 >
   <div>
-    <a href={`/posts/${slug}`} class="font-semibold link link-hover text-primary text-lg sm:text-xl md:text-2xl font-lora">
+    <a href={`/${slug}`} class="font-semibold link link-hover text-primary text-lg sm:text-xl md:text-2xl font-lora">
       {title}
     </a>
     <div class="mt-4 space-y-3">
@@ -26,17 +27,9 @@ const { post: { title, description, slug, date, tags } } = Astro.props;
         <p aria-label="Date" class="text-sm">{date}</p>
       </div>
     </div>
-    {tags && tags.length > 0 && (
-      <div class="flex items-center gap-2 mt-4">
-        {tags.map(({ sys: { id }}) => (
-          <a href={`/tags/${id}`} class="badge badge-soft hover:badge-primary">
-            #{id}
-          </a>
-        ))}
-      </div>
-    )}
+    <TagList {tags} class="mt-4" />
   </div>
-  <a href={`/posts/${slug}`} class="btn btn-outline btn-primary rounded-full mt-6">
+  <a href={`/${slug}`} class="btn btn-outline btn-primary rounded-full mt-6">
     Baca selengkapnya
   </a>
 </div>

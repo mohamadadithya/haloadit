@@ -3,6 +3,7 @@ import ArticleCard from "@components/article/ArticleCard.astro";
 import Container from "@components/Container.astro";
 import type { BlogPost } from "@contentful";
 import { contentfulClient } from '@contentful';
+import { formatDate } from '@helpers';
 
 interface Props {
   limit?: number;
@@ -21,18 +22,18 @@ const posts = entries.items.map((item) => {
     slug,
     description,
     tags,
-    date: new Date(date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' })
+    date: formatDate(date)
   };
 });
 
 export type PostListItem = typeof posts[number];
 ---
 
-<div class="py-10 min-h-dvh" id="writing">
+<div class="py-8 md:py-10 min-h-dvh" id="writing">
   <Container>
     <h2 class="section-title mb-6">Tulisan Terbaru</h2>
     <div class="space-y-6">
-      {posts.map((post) => <ArticleCard post={post} />)}
+      {posts.map((post) => <ArticleCard {post} />)}
       <a href="/posts" class="btn btn-soft btn-primary"
         >Lihat tulisan lainnya
       </a>

@@ -1,0 +1,50 @@
+---
+import TagList from "@components/article/TagList.astro";
+import TOC from "@components/article/TOC.svelte";
+import Container from "@components/Container.astro";
+import { contentfulClient, type BlogPost } from "@contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import { formatDate, getTOCAndHTML } from "@helpers";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Layout from "@layouts/Layout.astro";
+
+
+export async function getStaticPaths() {
+    const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost' });
+
+    const pages = entries.items.map((item) => {
+        const { fields: { title, content, date, slug }, metadata: { tags } } = item;
+        const html = documentToHtmlString(content);
+        const { html: htmlWithSlugs, toc } = getTOCAndHTML(html);
+        
+        return {
+            params: { slug },
+            props: {
+                title,
+                tags,
+                toc,
+                content: htmlWithSlugs,
+                date: formatDate(date),
+            }
+        }
+    });
+
+    return pages;
+}
+
+const { title, content, date, tags, toc } = Astro.props;
+---
+
+<Layout>
+    <BaseLayout class="min-h-dvh">
+       <Container>
+        <h1 class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty">{title}</h1>
+        <p class="mt-5 text-balance text-gray-400">Dipublikasikan pada <span class="font-semibold">{date}</span></p>
+        <TagList {tags} class="mt-4" />
+        <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
+            <article class="prose max-w-3.5xl lg:max-w-prose" set:html={content} />
+            <TOC items={toc} client:load />
+        </div>
+       </Container>
+    </BaseLayout>
+</Layout>

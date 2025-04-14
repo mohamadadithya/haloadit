@@ -16,7 +16,7 @@ export async function GET({ site }: AstroConfig) {
 
       return {
         ...data,
-        link: `/posts/${data.slug || post.id}`,
+        link: `/${data.slug || post.id}`,
         customData: `<language>id-ID</language>`,
       };
     }),

@@ -1,0 +1,23 @@
+---
+import { cn } from '@helpers';
+import type { TagLink } from 'contentful'
+
+interface Props {
+    tags: {
+        sys: TagLink
+    }[];
+    class?: string;
+}
+
+const { tags, class: className } = Astro.props;
+---
+
+{tags && tags.length > 0 && (
+    <div class={cn('flex items-center gap-2', className)}>
+      {tags.map(({ sys: { id }}) => (
+        <a href={`/tags/${id}`} class="badge badge-soft hover:badge-primary">
+          #{id}
+        </a>
+      ))}
+    </div>
+  )}

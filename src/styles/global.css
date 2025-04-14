@@ -15,7 +15,7 @@
 @theme {
   --font-inter: "Inter", sans-serif;
   --font-lora: "Lora", serif;
-  --color-muted: var(--color-gray-700);
+  --color-muted: var(--color-gray-400);
   --container-3.5xl: 53rem;
 }
 

@@ -22,7 +22,7 @@ const { post: { title, description, slug, date, tags } } = Astro.props;
       <p class="line-clamp-2">
         {description}
       </p>
-      <div class="flex items-center gap-2 text-gray-400">
+      <div class="flex items-center gap-2 text-muted">
         <Icon name="mdi:calendar" class="size-5" />
         <p aria-label="Date" class="text-sm">{date}</p>
       </div>

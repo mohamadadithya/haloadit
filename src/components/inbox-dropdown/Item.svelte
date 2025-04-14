@@ -11,7 +11,7 @@
 >
   <div class="flex items-center justify-between gap-2">
     <div class="badge badge-soft badge-primary badge-sm">Postingan</div>
-    <p class="text-gray-400 text-xs">5 menit yang lalu</p>
+    <p class="text-muted text-xs">5 menit yang lalu</p>
   </div>
   <p class="font-medium text-balance">
     Lorem ipsum dolor sit amet consectetur.

@@ -23,7 +23,8 @@ export default defineConfig({
     include: {
       mdi: ["*"],
       lucide: ["settings"],
-      uil: ["*"]
+      uil: ["*"],
+      bi: ["twitter-x"]
     }
   })],
   vite: {

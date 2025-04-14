@@ -42,8 +42,8 @@ const { title, content, date, tags, toc } = Astro.props;
         <p class="mt-5 text-balance text-muted">Dipublikasikan pada <span class="font-semibold">{date}</span></p>
         <TagList {tags} class="mt-4" />
         <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
-            <article class="prose max-w-3.5xl lg:max-w-prose" set:html={content} />
-            <TOC items={toc} client:load />
+            <article class="prose w-full max-w-3.5xl lg:max-w-prose" set:html={content} />
+            {toc.length > 0 && <TOC client:load items={toc} />}
         </div>
        </Container>
     </BaseLayout>

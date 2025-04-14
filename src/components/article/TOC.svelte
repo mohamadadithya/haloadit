@@ -32,7 +32,9 @@
   });
 </script>
 
-<div class="toc lg:sticky lg:top-24 p-5 bg-base-200 w-full rounded-2xl shadow">
+<div
+  class="toc flex-1 lg:sticky lg:top-24 p-5 bg-base-200 w-full rounded-2xl shadow"
+>
   <p class="font-lora font-semibold mb-4 text-primary uppercase">Daftar Isi</p>
   <ul class="list-inside list-disc space-y-1.5">
     {#each items as { id, text }}

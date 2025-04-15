@@ -12,10 +12,11 @@ const contentfulClient = contentful.createClient({
 interface BlogPost {
   contentTypeId: "blogPost";
   fields: {
+    image: EntryFieldTypes.AssetLink;
     title: EntryFieldTypes.Text;
-    content: EntryFieldTypes.RichText;
-    date: EntryFieldTypes.Date;
     description: EntryFieldTypes.Text;
+    date: EntryFieldTypes.Date;
+    content: EntryFieldTypes.RichText;
     slug: EntryFieldTypes.Text;
   };
 }

@@ -17,7 +17,7 @@ export async function getStaticPaths() {
   const pages = await Promise.all(
     entries.items.map(async (item) => {
       const {
-        fields: { title, content, date, slug },
+        fields: { image, title, content, date, slug },
         metadata: { tags },
       } = item;
 
@@ -26,6 +26,7 @@ export async function getStaticPaths() {
       return {
         params: { slug },
         props: {
+          image,
           title,
           tags,
           toc,
@@ -40,7 +41,7 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { title, content, date, tags, toc, slug } = Astro.props;
+const { image, title, content, date, tags, toc, slug } = Astro.props;
 ---
 
 <Layout>

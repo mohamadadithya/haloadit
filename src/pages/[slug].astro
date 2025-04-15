@@ -3,52 +3,98 @@ import TagList from "@components/article/TagList.astro";
 import TOC from "@components/article/TOC.svelte";
 import Container from "@components/Container.astro";
 import { contentfulClient, type BlogPost } from "@contentful";
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import { formatDate, getTOCAndHTML } from "@helpers";
+import { formatDate } from "@helpers";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
 import { slide } from "astro:transitions";
-
+import { renderPostContent } from "@lib/post.render";
 
 export async function getStaticPaths() {
-    const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost' });
+  const entries = await contentfulClient.getEntries<BlogPost>({
+    content_type: "blogPost",
+  });
 
-    const pages = entries.items.map((item) => {
-        const { fields: { title, content, date, slug }, metadata: { tags } } = item;
-        const html = documentToHtmlString(content);
-        const { html: htmlWithSlugs, toc } = getTOCAndHTML(html);
-        
-        return {
-            params: { slug },
-            props: {
-                title,
-                tags,
-                toc,
-                content: htmlWithSlugs,
-                date: formatDate(date),
-                slug
-            }
-        }
-    });
+  const pages = await Promise.all(
+    entries.items.map(async (item) => {
+      const {
+        fields: { title, content, date, slug },
+        metadata: { tags },
+      } = item;
 
-    return pages;
+      const { html, toc } = await renderPostContent(content);
+
+      return {
+        params: { slug },
+        props: {
+          title,
+          tags,
+          toc,
+          content: html,
+          date: formatDate(date),
+          slug,
+        },
+      };
+    })
+  );
+
+  return pages;
 }
 
 const { title, content, date, tags, toc, slug } = Astro.props;
 ---
 
 <Layout>
-    <BaseLayout class="min-h-dvh">
-       <Container>
-        <h1 transition:name={`title-${slug}`} class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty">{title}</h1>
-        <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
-            Dipublikasikan pada <span class="font-semibold">{date}</span>
-        </p>
-        <TagList {tags} class="mt-4" />
-        <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
-            <article transition:name={`article-${slug}`} transition:animate={slide({ duration: 850 })} class="prose w-full max-w-3.5xl lg:max-w-prose" set:html={content} />
-            {toc.length > 0 && <TOC client:load items={toc} />}
-        </div>
-       </Container>
-    </BaseLayout>
+  <BaseLayout class="min-h-dvh">
+    <Container>
+      <h1
+        transition:name={`title-${slug}`}
+        class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
+      >
+        {title}
+      </h1>
+      <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
+        Dipublikasikan pada <span class="font-semibold">{date}</span>
+      </p>
+      <TagList {tags} class="mt-4" />
+      <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
+        <article
+          transition:name={`article-${slug}`}
+          transition:animate={slide({ duration: 850 })}
+          class="prose w-full max-w-3.5xl lg:max-w-prose"
+          set:html={content}
+        />
+        {toc.length > 0 && <TOC client:load items={toc} />}
+      </div>
+    </Container>
+  </BaseLayout>
 </Layout>
+
+<script>
+  document.addEventListener("click", handleCopyCodeBlock);
+
+  /**
+   * Handles the click event for copy buttons within code blocks.
+   *
+   * This function checks if the clicked target is a copy button within a
+   * code block. If so, it retrieves the code to be copied from the button's
+   * data attributes and writes it to the clipboard. It also temporarily
+   * changes the button's text to indicate that the code has been copied.
+   *
+   * @param event - The click event triggered on the document.
+   */
+
+  function handleCopyCodeBlock(event: Event) {
+    const target = event.target as HTMLButtonElement;
+
+    if (target.matches(".code-block-wrapper__copy-button")) {
+      const code =
+        target.dataset.clipboardCode ||
+        target.getAttribute("data-clipboard-code");
+
+      navigator.clipboard.writeText(code as string);
+      target.textContent = "Disalin!";
+
+      setTimeout(() => (target.textContent = "Salin"), 1500);
+    }
+  }
+</script>

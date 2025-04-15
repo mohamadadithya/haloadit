@@ -7,6 +7,7 @@ import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { formatDate, getTOCAndHTML } from "@helpers";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
+import { slide } from "astro:transitions";
 
 
 export async function getStaticPaths() {
@@ -25,6 +26,7 @@ export async function getStaticPaths() {
                 toc,
                 content: htmlWithSlugs,
                 date: formatDate(date),
+                slug
             }
         }
     });
@@ -32,17 +34,19 @@ export async function getStaticPaths() {
     return pages;
 }
 
-const { title, content, date, tags, toc } = Astro.props;
+const { title, content, date, tags, toc, slug } = Astro.props;
 ---
 
 <Layout>
     <BaseLayout class="min-h-dvh">
        <Container>
-        <h1 class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty">{title}</h1>
-        <p class="mt-5 text-balance text-muted">Dipublikasikan pada <span class="font-semibold">{date}</span></p>
+        <h1 transition:name={`title-${slug}`} class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty">{title}</h1>
+        <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
+            Dipublikasikan pada <span class="font-semibold">{date}</span>
+        </p>
         <TagList {tags} class="mt-4" />
         <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
-            <article class="prose w-full max-w-3.5xl lg:max-w-prose" set:html={content} />
+            <article transition:name={`article-${slug}`} transition:animate={slide({ duration: 850 })} class="prose w-full max-w-3.5xl lg:max-w-prose" set:html={content} />
             {toc.length > 0 && <TOC client:load items={toc} />}
         </div>
        </Container>

@@ -30,3 +30,14 @@
 @utility section-subtitle {
   @apply text-xl md:text-2xl lg:text-3xl heading-font;
 }
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

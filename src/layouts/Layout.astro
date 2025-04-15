@@ -1,13 +1,14 @@
 ---
-import "../styles/global.css";
+import "@assets/styles/global.css";
 import { SEO } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <!doctype html>
-<html lang="en" data-theme="forest">
+<html lang="en" data-theme="forest" transition:name="root" transition:animate="fade">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -54,6 +55,7 @@ import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
     <GoogleFontsOptimizer
       url="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap"
     />
+    <ClientRouter />
     <slot name="head" />
   </head>
   <body>

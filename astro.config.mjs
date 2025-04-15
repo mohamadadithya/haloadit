@@ -35,5 +35,6 @@ export default defineConfig({
     schema: {
       GA_ID: envField.string({ context: 'client', access: 'public' }),
     }
-  }
+  },
+  prefetch: true
 });

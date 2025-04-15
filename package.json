@@ -6,8 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "contentful-typescript-codegen": "contentful-typescript-codegen --output @types/generated/contentful.d.ts"
+    "astro": "astro"
   },
   "devDependencies": {
     "@astrojs/mdx": "^4.2.2",

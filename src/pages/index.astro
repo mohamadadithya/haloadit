@@ -14,18 +14,22 @@ import { contentfulClient, type BlogPost } from "@/lib/contentful";
 import { formatDate } from "@/helpers";
 
 const limit = 5;
-const entries = await contentfulClient.getEntries<BlogPost>({ content_type: 'blogPost', limit });
+const entries = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogPost",
+  limit,
+});
 const posts = entries.items.map((item) => {
-  const { fields: {
-    title, date, description, slug
-  }, metadata: { tags } } = item;
+  const {
+    fields: { title, date, description, slug },
+    metadata: { tags },
+  } = item;
 
   return {
     title,
     slug,
     description,
     tags,
-    date: formatDate(date)
+    date: formatDate(date),
   };
 });
 ---
@@ -109,11 +113,15 @@ const posts = entries.items.map((item) => {
   </section>
   <BaseLayout class="min-h-dvh border-t border-primary/30">
     <AboutSection />
-    <div class="py-8 md:py-10 min-h-dvh" id="writing">
-      <Container>
-        <h2 class="section-title mb-6">Tulisan Terbaru</h2>
-        <ArticleList {posts} />
-      </Container>
-    </div>   
+    {
+      posts.length > 0 && (
+        <div class="py-8 md:py-10 min-h-dvh" id="writing">
+          <Container>
+            <h2 class="section-title mb-6">Tulisan Terbaru</h2>
+            {posts.length > 0 && <ArticleList {posts} />}
+          </Container>
+        </div>
+      )
+    }
   </BaseLayout>
 </Layout>

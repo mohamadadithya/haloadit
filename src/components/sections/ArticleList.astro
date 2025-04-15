@@ -34,9 +34,6 @@ export type PostListItem = typeof posts[number];
     <h2 class="section-title mb-6">Tulisan Terbaru</h2>
     <div class="space-y-6">
       {posts.map((post) => <ArticleCard {post} />)}
-      <a href="/posts" class="btn btn-soft btn-primary"
-        >Lihat tulisan lainnya
-      </a>
     </div>
   </Container>
 </div>

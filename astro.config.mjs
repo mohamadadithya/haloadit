@@ -11,6 +11,7 @@ import playformCompress from '@playform/compress';
 import playformInline from '@playform/inline';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
+import { imageService } from '@unpic/astro/service';
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,5 +37,11 @@ export default defineConfig({
       GA_ID: envField.string({ context: 'client', access: 'public' }),
     }
   },
-  prefetch: true
+  prefetch: true,
+  image: {
+    service: imageService({
+      placeholder: 'dominantColor',
+      fallbackService: 'astro'
+    })
+  }
 });

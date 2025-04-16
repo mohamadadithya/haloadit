@@ -1,10 +1,9 @@
 ---
-import type { PostListItem } from "@components/sections/ArticleList.astro";
-import { Icon } from "astro-icon/components";
+import type { PostListItem } from "@/types";
 import TagList from "./TagList.astro";
 
 interface Props {
-  post: PostListItem
+  post: PostListItem;
 }
 
 const { post: { title, description, slug, date, tags } } = Astro.props;

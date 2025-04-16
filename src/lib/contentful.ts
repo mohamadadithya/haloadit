@@ -31,4 +31,5 @@ interface CodeBlock {
 
 type CodeBlockEntry = Entry<CodeBlock>;
 
-export { contentfulClient, type BlogPost, type CodeBlockEntry };
+export { contentfulClient };
+export type { CodeBlockEntry, BlogPost };

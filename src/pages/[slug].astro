@@ -17,19 +17,36 @@ export async function getStaticPaths() {
   const pages = await Promise.all(
     entries.items.map(async (item) => {
       const {
-        fields: { image, title, content, date, slug },
+        fields: { title, description, content, date, slug, image },
         metadata: { tags },
       } = item;
 
       const { html, toc } = await renderPostContent(content);
 
+      let imageObject: null | {
+        src: string;
+        description: string;
+      } = null;
+
+      if (image) {
+        const imageId = image.sys.id;
+        const asset = await contentfulClient.getAsset(imageId);
+        const file = asset.fields.file;
+
+        imageObject = {
+          src: file?.url || "",
+          description: asset.fields.description || "",
+        };
+      }
+
       return {
         params: { slug },
         props: {
-          image,
           title,
+          description,
           tags,
           toc,
+          coverImage: imageObject,
           content: html,
           date: formatDate(date),
           slug,
@@ -41,7 +58,7 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { image, title, content, date, tags, toc, slug } = Astro.props;
+const { title, description, content, date, tags, toc, slug, coverImage } = Astro.props;
 ---
 
 <Layout>
@@ -53,17 +70,34 @@ const { image, title, content, date, tags, toc, slug } = Astro.props;
       >
         {title}
       </h1>
+      {description && <p class="mt-3 text-muted">{description}</p>}
       <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
         Dipublikasikan pada <span class="font-semibold">{date}</span>
       </p>
       <TagList {tags} class="mt-4" />
+      {
+        coverImage && (
+          <div class="my-8 space-y-4 text-center">
+            <img
+              src={coverImage.src}
+              alt={title}
+              class="w-full object-cover rounded-xl"
+            />
+            <p aria-label="Image description" class="text-sm text-muted">
+              {coverImage.description}
+            </p>
+          </div>
+        )
+      }
       <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
-        <article
-          transition:name={`article-${slug}`}
-          transition:animate={slide({ duration: 850 })}
-          class="prose w-full max-w-3.5xl lg:max-w-prose"
-          set:html={content}
-        />
+        <div class="w-full max-w-3.5xl lg:max-w-prose">
+          <article
+            transition:name={`article-${slug}`}
+            transition:animate={slide({ duration: 850 })}
+            class="prose max-w-none"
+            set:html={content}
+          />
+        </div>
         {toc.length > 0 && <TOC client:load items={toc} />}
       </div>
     </Container>

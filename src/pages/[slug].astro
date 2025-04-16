@@ -8,7 +8,8 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
 import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
-import { Image } from '@unpic/astro';
+import { Image } from "astro:assets";
+import { normalizeImageUrl } from "@helpers";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -35,7 +36,7 @@ export async function getStaticPaths() {
         const file = asset.fields.file;
 
         imageObject = {
-          src: file?.url || '',
+          src: file?.url ? normalizeImageUrl(file.url) : "",
           description: asset.fields.description || "",
         };
       }
@@ -81,9 +82,11 @@ const { title, description, content, date, tags, toc, slug, coverImage } = Astro
           <div class="my-8 space-y-4 text-center">
             <Image
               src={coverImage.src}
+              width={1500}
+              height={800}
               alt={title}
               class="w-full object-cover rounded-xl"
-              layout="fullWidth"
+              layout="full-width"
             />
             <p aria-label="Image description" class="text-sm text-muted">
               {coverImage.description}

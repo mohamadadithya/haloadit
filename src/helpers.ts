@@ -32,4 +32,20 @@ function formatDate(date: string) {
   });
 }
 
-export { cn, formatDate };
+/**
+ * Normalize an image URL by prepending "https:" if it starts with "//".
+ *
+ * @param url - An image URL.
+ * @returns A normalized image URL.
+ *
+ * @example
+ * normalizeImageUrl("//example.com/image.jpg") // returns "https://example.com/image.jpg"
+ * normalizeImageUrl("https://example.com/image.jpg") // returns "https://example.com/image.jpg"
+ */
+function normalizeImageUrl(url: string) {
+  if (url.startsWith("//")) return `https:${url}`;
+
+  return url;
+}
+
+export { cn, formatDate, normalizeImageUrl };

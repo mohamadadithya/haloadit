@@ -39,8 +39,9 @@ export default defineConfig({
   },
   prefetch: true,
   image: {
+    remotePatterns: [{ protocol: 'https' }],
     service: imageService({
-      placeholder: 'dominantColor',
+      placeholder: 'blurhash',
       fallbackService: 'astro'
     })
   }

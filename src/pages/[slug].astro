@@ -71,16 +71,18 @@ const { title, description, content, date, tags, toc, slug, coverImage } =
 <Layout>
   <BaseLayout class="min-h-dvh">
     <Container>
-      <h1
+      <div class="text-left sm:text-center">
+        <h1
         transition:name={`title-${slug}`}
         class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
       >
         {title}
       </h1>
-      {description && <p class="mt-3 text-muted">{description}</p>}
+      {description && <p class="mt-3 text-muted text-balance">{description}</p>}
       <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
         Dipublikasikan pada <span class="font-semibold">{date}</span>
       </p>
+      </div>
       <TagList {tags} class="mt-4" />
       {
         coverImage && (
@@ -93,7 +95,8 @@ const { title, description, content, date, tags, toc, slug, coverImage } =
               loading="eager"
               decoding="async"
               fetchpriority="high"
-              class="w-full h-auto rounded-xl"
+              layout="full-width"
+              class="w-full max-w-2xl mx-auto h-auto rounded-xl"
             />
            {
               coverImage.description && (

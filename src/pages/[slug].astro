@@ -8,7 +8,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
 import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
-import { Image } from "astro:assets";
+import { Image, Picture } from "astro:assets";
 import { normalizeImageUrl } from "@helpers";
 
 export async function getStaticPaths() {
@@ -28,6 +28,8 @@ export async function getStaticPaths() {
       let imageObject: null | {
         src: string;
         description: string;
+        width: number;
+        height: number;
       } = null;
 
       if (image) {
@@ -38,6 +40,8 @@ export async function getStaticPaths() {
         imageObject = {
           src: file?.url ? normalizeImageUrl(file.url) : "",
           description: asset.fields.description || "",
+          width: file?.details.image?.width || 1500,
+          height: file?.details.image?.height || 1000,
         };
       }
 
@@ -60,7 +64,8 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { title, description, content, date, tags, toc, slug, coverImage } = Astro.props;
+const { title, description, content, date, tags, toc, slug, coverImage } =
+  Astro.props;
 ---
 
 <Layout>
@@ -80,17 +85,23 @@ const { title, description, content, date, tags, toc, slug, coverImage } = Astro
       {
         coverImage && (
           <div class="my-8 space-y-4 text-center">
-            <Image
+            <Picture
               src={coverImage.src}
-              width={1500}
-              height={800}
               alt={title}
-              class="w-full object-cover rounded-xl"
-              layout="full-width"
+              width={coverImage.width}
+              height={coverImage.height}
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              class="w-full h-auto rounded-xl"
+              formats={["avif", "webp"]}
             />
-            <p aria-label="Image description" class="text-sm text-muted">
+           {
+              coverImage.description && (
+              <p aria-label="Image description" class="text-sm text-muted mt-5">
               {coverImage.description}
             </p>
+           )}
           </div>
         )
       }

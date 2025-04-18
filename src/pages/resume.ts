@@ -1,10 +1,9 @@
-export function GET() {
-  const resumeUrl = `https://oobsgatmbpvrncgfqqjb.supabase.co/storage/v1/object/public/documents//Mohamad%20Adithya%20-%20CV.pdf`;
+import type { APIRoute } from "astro";
 
-  return new Response(null, {
-    status: 307,
-    headers: {
-      Location: resumeUrl,
-    },
-  });
-}
+export const GET: APIRoute = ({ redirect }) => {
+  const resumeUrl =
+    "https://drive.google.com/file/d/1eldd0aLiAb1FUCkwZWZxsT5O6q0mXbnR/view?usp=drive_link";
+
+  // Redirect to the resume URL
+  return redirect(resumeUrl);
+};

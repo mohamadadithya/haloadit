@@ -1,7 +1,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  themes: emerald, forest --default --prefersdark, forest;
+  themes:
+    emerald,
+    forest --default --prefersdark,
+    forest;
 }
 
 @plugin "daisyui/theme" {

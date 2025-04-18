@@ -1,7 +1,7 @@
 ---
 import TagList from "@components/article/TagList.astro";
 import TOC from "@components/article/TOC.svelte";
-import Container from "@components/Container.astro";
+import Container from "@components/Container.svelte";
 import { contentfulClient, type BlogPost } from "@contentful";
 import { formatDate } from "@helpers";
 import BaseLayout from "@layouts/BaseLayout.astro";
@@ -73,15 +73,22 @@ const { title, description, content, date, tags, toc, slug, coverImage } =
     <Container>
       <div class="text-left sm:text-center">
         <h1
-        transition:name={`title-${slug}`}
-        class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
-      >
-        {title}
-      </h1>
-      {description && <p class="mt-3 text-muted text-balance">{description}</p>}
-      <p class="mt-5 text-balance text-muted" transition:name={`date-${slug}`}>
-        Dipublikasikan pada <span class="font-semibold">{date}</span>
-      </p>
+          transition:name={`title-${slug}`}
+          class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
+        >
+          {title}
+        </h1>
+        {
+          description && (
+            <p class="mt-3 text-muted text-balance">{description}</p>
+          )
+        }
+        <p
+          class="mt-5 text-balance text-muted"
+          transition:name={`date-${slug}`}
+        >
+          Dipublikasikan pada <span class="font-semibold">{date}</span>
+        </p>
       </div>
       <TagList {tags} class="mt-4" />
       {
@@ -98,12 +105,11 @@ const { title, description, content, date, tags, toc, slug, coverImage } =
               layout="full-width"
               class="w-full max-w-2xl mx-auto h-auto rounded-xl"
             />
-           {
-              coverImage.description && (
+            {coverImage.description && (
               <p aria-label="Image description" class="text-sm text-muted mt-5">
-              {coverImage.description}
-            </p>
-           )}
+                {coverImage.description}
+              </p>
+            )}
           </div>
         )
       }

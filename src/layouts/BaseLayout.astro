@@ -1,5 +1,5 @@
 ---
-import Header from "@components/Header.astro";
+import Header from "@components/Header.svelte";
 
 interface Props {
   class?: string;
@@ -9,7 +9,7 @@ const { class: className } = Astro.props;
 ---
 
 <div class={className} aria-label="Base Layout">
-  <Header />
+  <Header client:load />
   <div class="py-8 md:py-10">
     <slot />
   </div>

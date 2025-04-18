@@ -101,17 +101,17 @@ const meta = {
       <div class="text-left sm:text-center">
         <h1
           transition:name={`title-${slug}`}
-          class="text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
+          class="text-2xl sm:text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
         >
           {title}
         </h1>
         {
           description && (
-            <p class="mt-3 text-muted text-balance">{description}</p>
+            <p class="mt-3 text-muted text-balance text-sm sm:text-base">{description}</p>
           )
         }
         <p
-          class="mt-5 text-balance text-muted"
+          class="mt-5 text-balance text-muted text-sm sm:text-base"
           transition:name={`date-${slug}`}
         >
           Dipublikasikan pada <span class="font-semibold">{date}</span>
@@ -130,7 +130,7 @@ const meta = {
               decoding="async"
               fetchpriority="high"
               layout="full-width"
-              class="w-full max-w-2xl mx-auto h-auto rounded-xl"
+              class="w-full h-auto rounded-xl"
             />
             {coverImage.description && (
               <p aria-label="Image description" class="text-sm text-muted mt-5">

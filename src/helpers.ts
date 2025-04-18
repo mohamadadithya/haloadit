@@ -16,18 +16,23 @@ function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Format a date string into a human-readable format suitable for display.
+ * Format a date string into a human-readable string using the Indonesian
+ * locale.
  *
- * @param date - A date string in ISO 8601 format.
- * @returns A human-readable date string, e.g. "17 Agustus 2022, 14:30 WIB".
+ * @param date - A date string in ISO format.
+ * @returns A human-readable string in the format "DD MMM YYYY, HH:mm z".
+ *
+ * @example
+ * formatDate("2022-01-01T12:00:00.000Z") // returns "1 Jan 2022, 19:00 WIB"
  */
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("id-ID", {
     day: "numeric",
-    month: "long",
+    month: "numeric",
     year: "numeric",
     hour: "numeric",
     minute: "numeric",
+    timeZone: "Asia/Jakarta",
     timeZoneName: "short",
   });
 }

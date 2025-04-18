@@ -21,7 +21,7 @@ import { ClientRouter } from "astro:transitions";
         basic: {
           title: siteConfig.title,
           type: "website",
-          image: "/favicon.svg",
+          image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
         },
       }}
       twitter={{
@@ -29,7 +29,7 @@ import { ClientRouter } from "astro:transitions";
         creator: "@MohamadAdithya",
         title: siteConfig.title,
         description: siteConfig.description,
-        image: "/favicon.svg",
+        image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`
       }}
       extend={{
         link: [

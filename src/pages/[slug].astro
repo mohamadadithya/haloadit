@@ -10,6 +10,8 @@ import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
 import { Image } from "astro:assets";
 import { normalizeImageUrl } from "@helpers";
+import { SEO } from "astro-seo";
+import siteConfig from "@/site.config";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -66,7 +68,31 @@ export async function getStaticPaths() {
 
 const { title, description, content, date, tags, toc, slug, coverImage } =
   Astro.props;
+
+const meta = {
+  title: `${title} — ${siteConfig.name}`,
+  image: coverImage?.src || `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
+};
 ---
+
+<SEO
+  title={meta.title}
+  {description}
+  openGraph={{
+    basic: {
+      title: meta.title,
+      type: "article",
+      image: meta.image,
+    },
+  }}
+  twitter={{
+    card: "summary_large_image",
+    creator: "@MohamadAdithya",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    image: meta.image,
+  }}
+/>
 
 <Layout>
   <BaseLayout class="min-h-dvh">

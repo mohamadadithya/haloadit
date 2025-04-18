@@ -2,6 +2,7 @@
   import siteConfig from "@site-config";
   import Container from "./Container.svelte";
   import HeaderActions from "./HeaderActions.svelte";
+  import { headerStore } from "@/constructors/header.constructor.svelte";
 
   const mainLinks = [
     {
@@ -19,23 +20,7 @@
     },
   ];
 
-  let lastScrollY = $state<number>(),
-    ticking = $state(false),
-    isScrollingDown = $state(false);
-
-  function handleScroll() {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const currentScrollY = scrollY;
-
-        if (lastScrollY) isScrollingDown = currentScrollY > lastScrollY;
-        lastScrollY = currentScrollY;
-        ticking = false;
-      });
-
-      ticking = true;
-    }
-  }
+  const { isScrollingDown, handleScroll } = $derived(headerStore);
 
   let isOnHome = $state(false);
 

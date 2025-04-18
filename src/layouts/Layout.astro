@@ -23,6 +23,11 @@ import { ClientRouter } from "astro:transitions";
           type: "website",
           image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
         },
+        optional: {
+          description: siteConfig.description,
+          siteName: siteConfig.name,
+          locale: 'id'
+        }
       }}
       twitter={{
         card: "summary_large_image",

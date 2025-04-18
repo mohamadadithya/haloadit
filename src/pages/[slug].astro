@@ -80,8 +80,8 @@ const meta = {
   {description}
   openGraph={{
     basic: {
-      title: meta.title,
       type: "article",
+      title: meta.title,
       image: meta.image,
     },
     optional: {
@@ -89,9 +89,9 @@ const meta = {
     }
   }}
   twitter={{
-    title: siteConfig.title,
-    description: siteConfig.description,
+    title: meta.title,
     image: meta.image,
+    description,
   }}
 />
 

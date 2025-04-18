@@ -8,7 +8,7 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class={className} aria-label="Base Layout">
+<div class=`${className} overflow-clip` aria-label="Base Layout">
   <Header client:load />
   <div class="py-8 md:py-10">
     <slot />

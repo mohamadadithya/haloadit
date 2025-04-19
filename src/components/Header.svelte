@@ -26,6 +26,11 @@
 
   $effect(() => {
     isOnHome = location.pathname === "/";
+
+    return () => {
+      isOnHome = false;
+      headerStore.isScrollingDown = false;
+    };
   });
 </script>
 

@@ -17,10 +17,12 @@ import { ClientRouter } from "astro:transitions";
     <SEO
       title=`${siteConfig.title} — ${siteConfig.name}`
       description={siteConfig.description}
+      canonical={Astro.url.href}
       openGraph={{
         basic: {
           title: siteConfig.title,
           type: "website",
+          url: Astro.url.href,
           image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
         },
         optional: {

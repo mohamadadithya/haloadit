@@ -86,6 +86,9 @@ const structuredData = {
   description,
   headline: meta.title,
   image: meta.image,
+  url: `${siteConfig.origin}/${slug}`,
+  datePublished: new Date(date).toISOString(),
+  dateModified: publishedDate.toISOString(),
   author: {
     "@type": "Person",
     name: siteConfig.author,
@@ -100,6 +103,7 @@ const structuredData = {
     "@type": "Article",
     articleSection: "Blog",
     headline: meta.title,
+    url: `${siteConfig.origin}/${slug}`,
     description,
     image: meta.image,
     datePublished: new Date(date).toISOString(),

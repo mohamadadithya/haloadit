@@ -57,8 +57,9 @@ export async function getStaticPaths() {
           toc,
           coverImage: imageObject,
           content: html,
-          date: formatDate(date),
+          date,
           slug,
+          updatedAt: item.sys.updatedAt
         },
       };
     })
@@ -67,13 +68,54 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { title, description, content, date, tags, toc, slug, coverImage } =
+const { title, description, content, date, tags, toc, slug, coverImage, updatedAt } =
   Astro.props;
 
 const meta = {
   title: `${title} — ${siteConfig.name}`,
   image: coverImage?.src || `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
 };
+
+const isNotModified = new Date(date).getTime() === new Date(updatedAt).getTime();
+const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt)
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  name: meta.title,
+  description,
+  headline: meta.title,
+  image: meta.image,
+  author: {
+    "@type": "Person",
+    name: siteConfig.author,
+    url: `${siteConfig.origin}/#about`,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.origin,
+  },
+  mainEntity: {
+    "@type": "Article",
+    articleSection: "Blog",
+    headline: meta.title,
+    description,
+    image: meta.image,
+    datePublished: new Date(date).toISOString(),
+    dateModified: publishedDate.toISOString(),
+    author: {
+      "@type": "Person",
+      name: siteConfig.author,
+      url: `${siteConfig.origin}/#about`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.origin,
+    },
+  }
+}
 ---
 
 <SEO
@@ -96,6 +138,8 @@ const meta = {
   }}
 />
 
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+
 <Layout>
   <BaseLayout class="min-h-dvh">
     <Container>
@@ -115,7 +159,7 @@ const meta = {
           class="mt-5 text-balance text-muted text-sm sm:text-base"
           transition:name={`date-${slug}`}
         >
-          Dipublikasikan pada <span class="font-semibold">{date}</span>
+          {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span class="font-semibold">{formatDate(publishedDate.toString())}</span>
         </p>
       </div>
       <TagList {tags} class="mt-4" />

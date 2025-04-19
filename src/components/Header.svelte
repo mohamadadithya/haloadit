@@ -32,13 +32,15 @@
       headerStore.isScrollingDown = false;
     };
   });
+
+  const isShow = $derived((!isScrollingDown && !isOnHome) || isOnHome);
 </script>
 
 <svelte:window onscroll={handleScroll} />
 
 <header
   class="py-5 sticky top-0 z-50 duration-500 bg-base-100"
-  class:show={(!isScrollingDown && !isOnHome) || isOnHome}
+  class:show={isShow}
 >
   <Container
     class="flex md:items-center justify-between flex-col gap-6 md:flex-row"

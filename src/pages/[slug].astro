@@ -9,10 +9,10 @@ import Layout from "@layouts/Layout.astro";
 import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
 import { Image } from "astro:assets";
-import { normalizeImageUrl } from "@helpers";
 import { SEO } from "astro-seo";
 import siteConfig from "@/site.config";
 import ReadingProgress from '@components/article/ReadingProgress.svelte';
+import { getPostTags, getPostCoverImage } from "@lib/post.render";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -22,31 +22,12 @@ export async function getStaticPaths() {
   const pages = await Promise.all(
     entries.items.map(async (item) => {
       const {
-        fields: { title, description, content, date, slug, image },
-        metadata: { tags },
+        fields: { title, description, content, date, slug, image, tags: tagEntryLinks },
       } = item;
 
+      const tags = await Promise.all(getPostTags(tagEntryLinks));
+      const coverImage = await getPostCoverImage(image);
       const { html, toc } = await renderPostContent(content);
-
-      let imageObject: null | {
-        src: string;
-        description: string;
-        width: number;
-        height: number;
-      } = null;
-
-      if (image) {
-        const imageId = image.sys.id;
-        const asset = await contentfulClient.getAsset(imageId);
-        const file = asset.fields.file;
-
-        imageObject = {
-          src: file?.url ? normalizeImageUrl(file.url) : "",
-          description: asset.fields.description || "",
-          width: file?.details.image?.width || 1500,
-          height: file?.details.image?.height || 1000,
-        };
-      }
 
       return {
         params: { slug },
@@ -55,10 +36,10 @@ export async function getStaticPaths() {
           description,
           tags,
           toc,
-          coverImage: imageObject,
-          content: html,
+          coverImage,
           date,
           slug,
+          content: html,
           updatedAt: item.sys.updatedAt
         },
       };
@@ -166,7 +147,7 @@ const structuredData = {
           {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span class="font-semibold">{formatDate(publishedDate.toString())}</span>
         </p>
       </div>
-      <TagList {tags} class="mt-4" />
+      <TagList {tags} class="mt-4 max-w-fit sm:mx-auto" />
       {
         coverImage && (
           <div class="my-8 space-y-4 text-center">

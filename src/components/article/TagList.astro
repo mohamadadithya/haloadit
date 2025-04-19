@@ -4,7 +4,8 @@ import type { TagLink } from 'contentful'
 
 interface Props {
     tags: {
-        sys: TagLink
+      name: string;
+      slug: string;
     }[];
     class?: string;
 }
@@ -14,9 +15,9 @@ const { tags, class: className } = Astro.props;
 
 {tags && tags.length > 0 && (
     <div class={cn('flex items-center gap-2', className)}>
-      {tags.map(({ sys: { id }}) => (
-        <a href={`/tags/${id}`} class="badge badge-soft hover:badge-primary">
-          #{id}
+      {tags.map(({ name, slug }) => (
+        <a href={`/tags/${slug}`} class="badge badge-soft hover:badge-primary">
+          #{name}
         </a>
       ))}
     </div>

@@ -1,10 +1,16 @@
-import type { CodeBlockEntry } from "@contentful";
+import {
+  contentfulClient,
+  type AssetUnresolvedLink,
+  type CodeBlockEntry,
+  type TagUnresolvedLink,
+} from "@contentful";
 import { BLOCKS, type Document } from "@contentful/rich-text-types";
 import { highlightCode } from "./shiki";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { JSDOM } from "jsdom";
 import slugify from "slugify";
 import type { TOCItem } from "@/types";
+import { normalizeImageUrl } from "@/helpers";
 
 /**
  * Render a Contentful rich text document, replacing code blocks with
@@ -144,4 +150,69 @@ function getTOCAndHTML(html: string): {
   };
 }
 
-export { renderWithShiki, renderPostContent };
+/**
+ * Retrieves an array of tag objects from an array of Contentful TagEntryLink objects.
+ *
+ * This function asynchronously fetches the tag entries using the Contentful client
+ * and constructs an array of objects with `name` and `slug` properties for each tag.
+ *
+ * @param entryLinks - An array of `TagEntryLink` objects representing links to Contentful tag entries.
+ * @returns A promise that resolves to an array of objects, each containing a `name` and `slug` property of a tag.
+ */
+
+function getPostTags(entryLinks: TagUnresolvedLink[]) {
+  return Array.isArray(entryLinks)
+    ? entryLinks.map(async (tagEntryLink) => {
+        const tag = await contentfulClient.getEntry(tagEntryLink.sys.id);
+
+        return {
+          name: tag.fields.name as string,
+          slug: tag.fields.slug as string,
+        };
+      })
+    : [];
+}
+
+/**
+ * Retrieves a cover image object from a Contentful AssetEntryLink.
+ *
+ * If the `image` parameter is not null, this function asynchronously fetches
+ * the linked asset entry using the Contentful client and constructs an object
+ * with the `src`, `description`, `width`, and `height` properties.
+ *
+ * The `src` property is a normalized URL string from the asset's `file.url`.
+ * The `description` property is the asset's `fields.description` string.
+ * The `width` and `height` properties are the asset's `fields.file.details.image`
+ * width and height numbers, respectively, or fallback values of 1500 and 1000
+ * if the asset does not have image details.
+ *
+ * @param image - A `TagEntryLink` object representing a link to a Contentful
+ *                asset entry.
+ * @returns An object with `src`, `description`, `width`, and `height` properties,
+ *          or null if the input is null.
+ */
+async function getPostCoverImage(image: AssetUnresolvedLink | null) {
+  let imageObject: null | {
+    src: string;
+    description: string;
+    width: number;
+    height: number;
+  } = null;
+
+  if (image) {
+    const imageId = image.sys.id;
+    const asset = await contentfulClient.getAsset(imageId);
+    const file = asset.fields.file;
+
+    imageObject = {
+      src: file?.url ? normalizeImageUrl(file.url) : "",
+      description: asset.fields.description || "",
+      width: file?.details.image?.width || 1500,
+      height: file?.details.image?.height || 1000,
+    };
+  }
+
+  return imageObject;
+}
+
+export { renderWithShiki, renderPostContent, getPostTags, getPostCoverImage };

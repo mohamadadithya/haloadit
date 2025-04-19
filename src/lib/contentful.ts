@@ -1,5 +1,5 @@
 import * as contentful from "contentful";
-import type { EntryFieldTypes, Entry } from "contentful";
+import type { EntryFieldTypes, Entry, UnresolvedLink, Asset } from "contentful";
 
 const contentfulClient = contentful.createClient({
   space: import.meta.env.CONTENTFUL_SPACE_ID,
@@ -8,6 +8,14 @@ const contentfulClient = contentful.createClient({
     : import.meta.env.CONTENTFUL_DELIVERY_TOKEN,
   host: import.meta.env.DEV ? "preview.contentful.com" : "cdn.contentful.com",
 });
+
+interface Tag {
+  contentTypeId: "tag";
+  fields: {
+    name: EntryFieldTypes.Text;
+    slug: EntryFieldTypes.Text;
+  };
+}
 
 interface BlogPost {
   contentTypeId: "blogPost";
@@ -18,6 +26,7 @@ interface BlogPost {
     date: EntryFieldTypes.Date;
     content: EntryFieldTypes.RichText;
     slug: EntryFieldTypes.Text;
+    tags: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<Tag>>;
   };
 }
 
@@ -29,7 +38,22 @@ interface CodeBlock {
   };
 }
 
+interface TagItem {
+  name: string;
+  slug: string;
+}
+
 type CodeBlockEntry = Entry<CodeBlock>;
+type TagUnresolvedLink =
+  | UnresolvedLink<"Entry">
+  | Entry<Tag, undefined, string>;
+type AssetUnresolvedLink = UnresolvedLink<"Asset"> | Asset<undefined, string>;
 
 export { contentfulClient };
-export type { CodeBlockEntry, BlogPost };
+export type {
+  CodeBlockEntry,
+  BlogPost,
+  TagItem,
+  TagUnresolvedLink,
+  AssetUnresolvedLink,
+};

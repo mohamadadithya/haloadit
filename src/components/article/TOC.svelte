@@ -5,6 +5,7 @@
   import { MediaQuery } from "svelte/reactivity";
   import ArrowRight from "@lucide/svelte/icons/arrow-right";
   import LayoutList from "@lucide/svelte/icons/layout-list";
+  import { onClickOutside } from "runed";
 
   interface Props {
     items: TOCItem[];
@@ -15,6 +16,7 @@
   const { isScrollingDown } = $derived(headerStore);
 
   let ref = $state<HTMLElement>(),
+    tocPanelMobileRef = $state<HTMLElement>(),
     isPassed = $state(false),
     isIntersecting = $state(false);
 
@@ -45,6 +47,11 @@
   const isShowTOCButton = $derived(
     isPassed && !isIntersecting && !largeScreen.current
   );
+
+  onClickOutside(
+    () => tocPanelMobileRef,
+    () => (isOpenMobilePanel = false)
+  );
 </script>
 
 <div
@@ -59,20 +66,12 @@
 
 {#if isOpenMobilePanel && isShowTOCButton}
   <div
+    bind:this={tocPanelMobileRef}
     in:fly={{ x: 100 }}
     out:fly={{ x: 100 }}
     class="p-5 bg-base-200 w-full rounded-2xl max-w-64 shadow fixed top-2/4 -translate-y-2/4 right-5"
   >
-    <button
-      type="button"
-      aria-label="Close"
-      onclick={() => (isOpenMobilePanel = false)}
-      class="btn btn-primary btn-soft mb-4 btn-sm"
-    >
-      Tutup
-      <ArrowRight class="size-5" />
-    </button>
-    {@render tocList()}
+    {@render tocList({ isShowCloseButton: true })}
   </div>
 {:else if !isOpenMobilePanel && isShowTOCButton}
   <div class="fixed top-2/4 -translate-y-2/4 right-5">
@@ -89,8 +88,25 @@
   </div>
 {/if}
 
-{#snippet tocList()}
-  <p class="font-lora font-semibold mb-4 text-primary uppercase">Daftar Isi</p>
+{#snippet tocList(
+  { isShowCloseButton }: { isShowCloseButton: boolean } = {
+    isShowCloseButton: false,
+  }
+)}
+  <div class="flex items-center gap-3 justify-between mb-4">
+    <p class="font-lora font-semibold text-primary uppercase">Daftar Isi</p>
+    {#if isShowCloseButton}
+      <button
+        type="button"
+        aria-label="Close"
+        onclick={() => (isOpenMobilePanel = false)}
+        class="btn btn-primary btn-soft btn-sm"
+      >
+        Tutup
+        <ArrowRight class="size-5" />
+      </button>
+    {/if}
+  </div>
   <ul class="space-y-3 text-sm">
     {#each items as { id, text }}
       <li>

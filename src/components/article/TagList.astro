@@ -1,12 +1,9 @@
 ---
+import type { TagItem } from '@/lib/contentful';
 import { cn } from '@helpers';
-import type { TagLink } from 'contentful'
 
 interface Props {
-    tags: {
-      name: string;
-      slug: string;
-    }[];
+    tags: TagItem[];
     class?: string;
 }
 

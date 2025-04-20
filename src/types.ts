@@ -1,4 +1,4 @@
-import type { TagLink } from "contentful";
+import type { TagItem } from "./lib/contentful";
 
 interface TOCItem {
   id: string;
@@ -10,9 +10,7 @@ interface PostListItem {
   title: string;
   slug: string;
   description: string;
-  tags: {
-    sys: TagLink;
-  }[];
+  tags: TagItem[];
   date: string;
 }
 [];

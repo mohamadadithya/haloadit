@@ -1,3 +1,4 @@
+import type { PostListItem } from "@/types";
 import * as contentful from "contentful";
 import type { EntryFieldTypes, Entry, UnresolvedLink, Asset } from "contentful";
 
@@ -40,7 +41,7 @@ interface CodeBlock {
 
 interface TagItem {
   name: string;
-  slug: string;
+  slug: PostListItem["slug"];
 }
 
 type CodeBlockEntry = Entry<CodeBlock>;

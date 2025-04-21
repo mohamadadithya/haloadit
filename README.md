@@ -1,6 +1,19 @@
 # Halo Adit — Personal Website of Mohamad Adithya​
 
-Welcome to my personal website, https://haloadit.com, a digital space where I share my journey as a frontend developer, designer, and writer. This site showcases my projects, writings, and provides insights into my professional background.​
+Welcome to my personal website, https://haloadit.com, a digital space where I share my journey as a frontend developer, designer, and writer. This site showcases my projects, writings, and provides insights into my professional background.
+
+## 📄 License
+
+This project uses a **dual license** structure:
+
+- **Code**: Licensed under the [MIT License](LICENSE).
+- **Content (writing, design, images, UI)**: Licensed under the [Creative Commons Attribution 4.0 International License](LICENSE-CONTENT).
+
+### ✏️ Attribution
+
+If you use this project publicly (e.g., in a showcase, website, or article), please credit:
+
+**Mohamad Adithya — [haloadit.com](https://www.haloadit.com)**​
 
 ## ✨ Features
 

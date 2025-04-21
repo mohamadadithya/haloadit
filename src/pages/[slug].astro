@@ -13,6 +13,7 @@ import { SEO } from "astro-seo";
 import siteConfig from "@/site.config";
 import ReadingProgress from "@components/article/ReadingProgress.svelte";
 import { getPostTags, getPostCoverImage } from "@lib/post.render";
+import Giscus from '@components/article/Giscus.astro';
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -202,23 +203,7 @@ const structuredData = {
             set:html={content}
           />
          <div class="mt-6 border-t pt-5 border-muted">
-          <script
-          src="https://giscus.app/client.js"
-          data-repo="mohamadadithya/haloadit"
-          data-repo-id="R_kgDOOQke1Q"
-          data-category="General"
-          data-category-id="DIC_kwDOOQke1c4CpTBw"
-          data-mapping="title"
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="1"
-          data-input-position="top"
-          data-theme="preferred_color_scheme"
-          data-lang="id"
-          data-loading="lazy"
-          crossorigin="anonymous"
-          async
-        ></script>
+          <Giscus />
          </div>
         </div>
         {toc.length > 0 && <TOC client:load items={toc} />}

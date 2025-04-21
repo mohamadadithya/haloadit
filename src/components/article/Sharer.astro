@@ -1,10 +1,10 @@
 ---
-import facebook from "@assets/social-icons/facebook.svg";
-import twitterX from "@assets/social-icons/twitter-x.svg";
-import linkedin from "@assets/social-icons/linkedin.svg";
-import telegram from "@assets/social-icons/telegram.svg";
-import whatsApp from "@assets/social-icons/whatsapp.svg";
-import pinterest from "@assets/social-icons/pinterest.svg";
+import facebook from "@assets/social-icons/facebook.png";
+import twitterX from "@assets/social-icons/twitter-x.png";
+import linkedin from "@assets/social-icons/linkedin.png";
+import telegram from "@assets/social-icons/telegram.png";
+import whatsApp from "@assets/social-icons/whatsapp.png";
+import pinterest from "@assets/social-icons/pinterest.png";
 import ShareMoreButton from "./ShareMoreButton.svelte";
 import { Image } from "astro:assets";
 
@@ -53,7 +53,7 @@ const socials = [
 ];
 ---
 
-<div class="flex items-center justify-center gap-5 flex-wrap">
+<div class="flex items-center justify-center gap-4 flex-wrap">
   {
     socials.map(({ name, href, icon }) => (
       <a
@@ -63,7 +63,7 @@ const socials = [
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Image class="size-6" src={icon} alt={name} />
+        <Image loading="lazy" width={32} height={32} class="size-8" src={icon} alt={name} />
       </a>
     ))
   }

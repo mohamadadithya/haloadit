@@ -11,7 +11,7 @@ import { renderPostContent } from "@lib/post.render";
 import { Image } from "astro:assets";
 import { SEO } from "astro-seo";
 import siteConfig from "@/site.config";
-import ReadingProgress from '@components/article/ReadingProgress.svelte';
+import ReadingProgress from "@components/article/ReadingProgress.svelte";
 import { getPostTags, getPostCoverImage } from "@lib/post.render";
 
 export async function getStaticPaths() {
@@ -22,7 +22,15 @@ export async function getStaticPaths() {
   const pages = await Promise.all(
     entries.items.map(async (item) => {
       const {
-        fields: { title, description, content, date, slug, image, tags: tagEntryLinks },
+        fields: {
+          title,
+          description,
+          content,
+          date,
+          slug,
+          image,
+          tags: tagEntryLinks,
+        },
       } = item;
 
       const tags = await Promise.all(getPostTags(tagEntryLinks));
@@ -40,7 +48,7 @@ export async function getStaticPaths() {
           date,
           slug,
           content: html,
-          updatedAt: item.sys.updatedAt
+          updatedAt: item.sys.updatedAt,
         },
       };
     })
@@ -49,16 +57,27 @@ export async function getStaticPaths() {
   return pages;
 }
 
-const { title, description, content, date, tags, toc, slug, coverImage, updatedAt } =
-  Astro.props;
+const {
+  title,
+  description,
+  content,
+  date,
+  tags,
+  toc,
+  slug,
+  coverImage,
+  updatedAt,
+} = Astro.props;
 
 const meta = {
   title: `${title} — ${siteConfig.name}`,
-  image: coverImage?.src || `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
+  image:
+    coverImage?.src || `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
 };
 
-const isNotModified = new Date(date).getTime() === new Date(updatedAt).getTime();
-const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt)
+const isNotModified =
+  new Date(date).getTime() === new Date(updatedAt).getTime();
+const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -99,8 +118,8 @@ const structuredData = {
       name: siteConfig.name,
       url: siteConfig.origin,
     },
-  }
-}
+  },
+};
 ---
 
 <SEO
@@ -114,7 +133,7 @@ const structuredData = {
     },
     optional: {
       description,
-    }
+    },
   }}
   twitter={{
     title: meta.title,
@@ -123,7 +142,7 @@ const structuredData = {
   }}
 />
 
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
 <Layout>
   <BaseLayout class="min-h-dvh">
@@ -137,14 +156,18 @@ const structuredData = {
         </h1>
         {
           description && (
-            <p class="mt-3 text-muted text-balance text-sm sm:text-base">{description}</p>
+            <p class="mt-3 text-muted text-balance text-sm sm:text-base">
+              {description}
+            </p>
           )
         }
         <p
           class="mt-5 text-balance text-muted text-sm sm:text-base"
           transition:name={`date-${slug}`}
         >
-          {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span class="font-semibold">{formatDate(publishedDate.toString())}</span>
+          {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span
+            class="font-semibold">{formatDate(publishedDate.toString())}</span
+          >
         </p>
       </div>
       <TagList {tags} class="mt-4 max-w-fit sm:mx-auto" />
@@ -178,6 +201,25 @@ const structuredData = {
             class="prose max-w-none"
             set:html={content}
           />
+         <div class="mt-6 border-t pt-5 border-muted">
+          <script
+          src="https://giscus.app/client.js"
+          data-repo="mohamadadithya/haloadit"
+          data-repo-id="R_kgDOOQke1Q"
+          data-category="General"
+          data-category-id="DIC_kwDOOQke1c4CpTBw"
+          data-mapping="title"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="1"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang="id"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        ></script>
+         </div>
         </div>
         {toc.length > 0 && <TOC client:load items={toc} />}
       </div>
@@ -188,11 +230,13 @@ const structuredData = {
 <ReadingProgress client:load />
 
 <script>
-  const copyCodeButtons = document.querySelectorAll(".code-block-wrapper__copy-button")
+  const copyCodeButtons = document.querySelectorAll(
+    ".code-block-wrapper__copy-button"
+  );
 
   copyCodeButtons.forEach((button) => {
-    button.addEventListener("click", handleCopyCodeBlock)
-  })
+    button.addEventListener("click", handleCopyCodeBlock);
+  });
 
   /**
    * Handles the copy code block functionality.
@@ -201,19 +245,19 @@ const structuredData = {
   function handleCopyCodeBlock(event: Event): void {
     const target = event.currentTarget as HTMLButtonElement;
     const code: string | null =
-        target.dataset.clipboardCode ||
-        target.getAttribute("data-clipboard-code");
+      target.dataset.clipboardCode ||
+      target.getAttribute("data-clipboard-code");
 
     if (code) {
       navigator.clipboard.writeText(code);
       target.innerHTML = `Disalin <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m12 15l2 2l4-4"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
 
-      target.classList.remove('btn-square');
+      target.classList.remove("btn-square");
 
       setTimeout(() => {
         target.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
 
-        target.classList.add('btn-square');
+        target.classList.add("btn-square");
       }, 1500);
     }
   }

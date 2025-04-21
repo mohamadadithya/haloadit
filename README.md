@@ -1,48 +1,45 @@
-# Astro Starter Kit: Basics
+# Halo Adit — Personal Website of Mohamad Adithya​
 
-```sh
-pnpm create astro@latest -- --template basics
+Welcome to my personal website, https://haloadit.com, a digital space where I share my journey as a frontend developer, designer, and writer. This site showcases my projects, writings, and provides insights into my professional background.​
+
+## ✨ Features
+
+* About Me: An overview of my background, skills, and experiences.
+* Writings: A collection of articles and tutorials on web development and design.
+* Resume: A downloadable version of my professional resume.
+* Contact Information: Links to my email, GitHub, LinkedIn, and other platforms.​
+
+## 🛠️ Technologies Used
+
+* Frontend: HTML, CSS, JavaScript, TypeScript
+* Frameworks: Astro & Svelte
+* Styling: Tailwind CSS, Daisy UI
+* Deployment: Vercel​
+
+## 🚀 Getting Started
+
+To run this project locally:
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/haloadit.com.git
+
+# Navigate to the project directory
+cd haloadit.com
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## 📬 Contact
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Feel free to reach out:
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+* Email: your.email@example.com
+* GitHub: github.com/yourusername
+* LinkedIn: linkedin.com/in/yourprofile
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+“Design is not just what it looks like and feels like. Design is how it works.” — Steve Jobs

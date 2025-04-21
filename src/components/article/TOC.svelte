@@ -18,7 +18,8 @@
   let ref = $state<HTMLElement>(),
     tocPanelMobileRef = $state<HTMLElement>(),
     isPassed = $state(false),
-    isIntersecting = $state(false);
+    isIntersecting = $state(false),
+    isOpenMobilePanel = $state(false);
 
   $effect(() => {
     const observer = new IntersectionObserver(
@@ -41,9 +42,6 @@
   });
 
   const largeScreen = new MediaQuery("(min-width: 1024px)");
-
-  let isOpenMobilePanel = $state(false);
-
   const isShowTOCButton = $derived(
     isPassed && !isIntersecting && !largeScreen.current
   );
@@ -52,8 +50,6 @@
     () => tocPanelMobileRef,
     () => (isOpenMobilePanel = false)
   );
-
-  $inspect(items);
 </script>
 
 <div

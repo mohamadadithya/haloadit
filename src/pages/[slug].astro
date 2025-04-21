@@ -13,7 +13,8 @@ import { SEO } from "astro-seo";
 import siteConfig from "@/site.config";
 import ReadingProgress from "@components/article/ReadingProgress.svelte";
 import { getPostTags, getPostCoverImage } from "@lib/post.render";
-import Giscus from '@components/article/Giscus.astro';
+import Giscus from "@components/article/Giscus.astro";
+import Sharer from "@components/article/Sharer.astro";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -202,9 +203,17 @@ const structuredData = {
             class="prose max-w-none"
             set:html={content}
           />
-         <div class="mt-6 border-t pt-5 border-muted">
-          <Giscus />
-         </div>
+          <div class="mt-6 border-t pt-8 border-muted">
+            <div class="mb-10 flex items-center gap-5 flex-wrap">
+              <p class="font-medium">Bagikan artikel ini ke:</p>
+              <Sharer
+                imageUrl={meta.image}
+                title={meta.title}
+                description={description}
+              />
+            </div>
+            <Giscus />
+          </div>
         </div>
         {toc.length > 0 && <TOC client:load items={toc} />}
       </div>

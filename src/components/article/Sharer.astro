@@ -1,0 +1,71 @@
+---
+import facebook from "@assets/social-icons/facebook.svg";
+import twitterX from "@assets/social-icons/twitter-x.svg";
+import linkedin from "@assets/social-icons/linkedin.svg";
+import telegram from "@assets/social-icons/telegram.svg";
+import whatsApp from "@assets/social-icons/whatsapp.svg";
+import pinterest from "@assets/social-icons/pinterest.svg";
+import ShareMoreButton from "./ShareMoreButton.svelte";
+import { Image } from "astro:assets";
+
+interface Props {
+  imageUrl: string;
+  title: string;
+  description: string;
+}
+
+const { imageUrl, title, description } = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+const textTemplate = `${title}\n\n${description}\n\n${canonicalUrl}`;
+
+const socials = [
+  {
+    name: "WhatsApp",
+    href: `https://api.whatsapp.com/send?text=${canonicalUrl}`,
+    icon: whatsApp,
+  },
+  {
+    name: "X",
+    href: `https://twitter.com/intent/tweet?url=${canonicalUrl}&text=${textTemplate}`,
+    icon: twitterX,
+  },
+  {
+    name: "LinkedIn",
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${canonicalUrl}`,
+    icon: linkedin,
+  },
+  {
+    name: "Facebook",
+    href: `https://facebook.com/sharer/sharer.php?u=${canonicalUrl}`,
+    icon: facebook,
+  },
+  {
+    name: "Telegram",
+    href: `https://t.me/share/url?url=${canonicalUrl}&text=${textTemplate}`,
+    icon: telegram,
+  },
+  {
+    name: "Pinterest",
+    href: `https://pinterest.com/pin/create/button/?url=${canonicalUrl}&media=${imageUrl}&description=${description}`,
+    icon: pinterest,
+  },
+];
+---
+
+<div class="flex items-center justify-center gap-5 flex-wrap">
+  {
+    socials.map(({ name, href, icon }) => (
+      <a
+        {href}
+        class="tooltip tooltip-bottom"
+        data-tip={name}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Image class="size-6" src={icon} alt={name} />
+      </a>
+    ))
+  }
+  <ShareMoreButton client:load {title} {description} {canonicalUrl} />
+</div>

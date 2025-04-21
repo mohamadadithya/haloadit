@@ -13,7 +13,7 @@ This project uses a **dual license** structure:
 
 If you use this project publicly (e.g., in a showcase, website, or article), please credit:
 
-**Mohamad Adithya — [haloadit.com](https://www.haloadit.com)**​
+**Mohamad Adithya** — [haloadit.com](https://www.haloadit.com)
 
 ## ✨ Features
 

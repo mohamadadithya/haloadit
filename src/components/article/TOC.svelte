@@ -52,6 +52,8 @@
     () => tocPanelMobileRef,
     () => (isOpenMobilePanel = false)
   );
+
+  $inspect(items);
 </script>
 
 <div
@@ -69,7 +71,7 @@
     bind:this={tocPanelMobileRef}
     in:fly={{ x: 100 }}
     out:fly={{ x: 100 }}
-    class="p-5 bg-base-200 w-full rounded-2xl max-w-64 shadow fixed top-2/4 -translate-y-2/4 right-5"
+    class="p-5 bg-base-200 w-full rounded-2xl max-w-72 shadow fixed top-2/4 -translate-y-2/4 right-5"
   >
     {@render tocList({ isShowCloseButton: true })}
   </div>
@@ -108,9 +110,11 @@
     {/if}
   </div>
   <ul class="space-y-3 text-sm">
-    {#each items as { id, text }}
-      <li>
-        <a href={`#${id}`} class="link link-hover">{text}</a>
+    {#each items as { id, text, level }}
+      <li class:list-disc={level !== "h2"} class:ml-6={level !== "h2"}>
+        <a href={`#${id}`} class="link link-hover">
+          {text}
+        </a>
       </li>
     {/each}
   </ul>

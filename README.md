@@ -51,8 +51,8 @@ npm run dev
 
 Feel free to reach out:
 
-* Email: your.email@example.com
-* GitHub: github.com/yourusername
-* LinkedIn: linkedin.com/in/yourprofile
+* Email: mohamadadithya@gmail.com
+* GitHub: github.com/mohamadadithya
+* LinkedIn: linkedin.com/in/mohamadadithya
 
 “Design is not just what it looks like and feels like. Design is how it works.” — Steve Jobs

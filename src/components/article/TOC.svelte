@@ -129,7 +129,7 @@
     class="space-y-4 text-sm"
     class:overflow-y-auto={isEnableOverflow}
     class:overscroll-y-contain={isEnableOverflow}
-    style="max-height: {tocMaxHeight}px"
+    style={isEnableOverflow ? `max-height: ${tocMaxHeight}px` : ""}
   >
     {#each items as { id, text, level }}
       <li

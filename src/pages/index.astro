@@ -12,26 +12,31 @@ import { Schema } from "astro-seo-schema";
 import ArticleList from "@components/sections/ArticleList.astro";
 import { contentfulClient, type BlogPost } from "@/lib/contentful";
 import { formatDate } from "@/helpers";
+import { getPostTags } from "@/lib/post.render";
 
 const limit = 5;
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "blogPost",
   limit,
 });
-const posts = entries.items.map((item) => {
-  const {
-    fields: { title, date, description, slug },
-    metadata: { tags },
-  } = item;
 
-  return {
-    title,
-    slug,
-    description,
-    tags,
-    date: formatDate(date),
-  };
-});
+const posts = await Promise.all(
+  entries.items.map(async (item) => {
+    const {
+      fields: { title, date, description, slug, tags: tagEntryLinks },
+    } = item;
+
+    const tags = await Promise.all(getPostTags(tagEntryLinks));
+
+    return {
+      title,
+      slug,
+      description,
+      tags,
+      date: formatDate(date),
+    };
+  })
+);
 ---
 
 <Layout>

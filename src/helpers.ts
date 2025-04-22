@@ -53,4 +53,47 @@ function normalizeImageUrl(url: string) {
   return url;
 }
 
-export { cn, formatDate, normalizeImageUrl };
+/**
+ * Deeply merges two objects, recursively combining properties of nested objects.
+ *
+ * - If a property in both objects is an object itself, `deepMerge` will merge those
+ *   sub-objects.
+ * - If a property exists only in the second object or is not an object in the first
+ *   object, it is directly assigned from the second object.
+ * - Arrays are not merged; they are replaced by the second object's value.
+ *
+ * @param obj1 - The target object to merge properties into.
+ * @param obj2 - The source object whose properties are merged into the target.
+ * @returns The merged object with combined properties from both inputs.
+ */
+
+function deepMerge<T extends Record<string, any>>(obj1: T, obj2: T): T {
+  for (const key in obj2) {
+    if (
+      obj2[key] &&
+      typeof obj2[key] === "object" &&
+      !Array.isArray(obj2[key])
+    ) {
+      if (
+        !obj1[key] ||
+        typeof obj1[key] !== "object" ||
+        Array.isArray(obj1[key])
+      ) {
+        obj1[key as Extract<keyof T, string>] = {} as T[Extract<
+          keyof T,
+          string
+        >];
+      }
+      obj1[key] = deepMerge(obj1[key] as T, obj2[key] as T) as T[Extract<
+        keyof T,
+        string
+      >];
+    } else {
+      obj1[key] = obj2[key];
+    }
+  }
+
+  return obj1;
+}
+
+export { cn, formatDate, normalizeImageUrl, deepMerge };

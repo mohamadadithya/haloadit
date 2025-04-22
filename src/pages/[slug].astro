@@ -9,12 +9,13 @@ import Layout from "@layouts/Layout.astro";
 import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
 import { Image } from "astro:assets";
-import { SEO } from "astro-seo";
 import siteConfig from "@/site.config";
 import ReadingProgress from "@components/article/ReadingProgress.svelte";
 import { getPostTags, getPostCoverImage } from "@lib/post.render";
 import Giscus from "@components/article/Giscus.astro";
 import Sharer from "@components/article/Sharer.astro";
+import Head from "@/components/Head.astro";
+import { Schema } from "astro-seo-schema";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -80,73 +81,75 @@ const meta = {
 const isNotModified =
   new Date(date).getTime() === new Date(updatedAt).getTime();
 const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
-
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  name: meta.title,
-  description,
-  headline: meta.title,
-  image: meta.image,
-  url: `${siteConfig.origin}/${slug}`,
-  datePublished: new Date(date).toISOString(),
-  dateModified: publishedDate.toISOString(),
-  author: {
-    "@type": "Person",
-    name: siteConfig.author,
-    url: `${siteConfig.origin}/#about`,
-  },
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.origin,
-  },
-  mainEntity: {
-    "@type": "Article",
-    articleSection: "Blog",
-    headline: meta.title,
-    url: `${siteConfig.origin}/${slug}`,
-    description,
-    image: meta.image,
-    datePublished: new Date(date).toISOString(),
-    dateModified: publishedDate.toISOString(),
-    author: {
-      "@type": "Person",
-      name: siteConfig.author,
-      url: `${siteConfig.origin}/#about`,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.origin,
-    },
-  },
-};
 ---
 
-<SEO
-  title={meta.title}
-  {description}
-  openGraph={{
-    basic: {
-      type: "article",
-      title: meta.title,
-      image: meta.image,
-    },
-    optional: {
-      description,
-    },
-  }}
-  twitter={{
-    title: meta.title,
-    image: meta.image,
-    description,
-  }}
-/>
-
-<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-
 <Layout>
+  <Head
+    slot="head"
+    seoData={{
+      title: meta.title,
+      description,
+      openGraph: {
+        basic: {
+          type: "article",
+          title: meta.title,
+          image: meta.image,
+        },
+        optional: {
+          description,
+        },
+      },
+      twitter: {
+        title: meta.title,
+        image: meta.image,
+        description,
+      },
+    }}
+  />
+  <Schema
+    slot="head"
+    item={{
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      name: meta.title,
+      description,
+      headline: meta.title,
+      image: meta.image,
+      url: `${siteConfig.origin}/${slug}`,
+      datePublished: new Date(date).toISOString(),
+      dateModified: publishedDate.toISOString(),
+      author: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/#about`,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.origin,
+      },
+      mainEntity: {
+        "@type": "Article",
+        articleSection: "Blog",
+        headline: meta.title,
+        url: `${siteConfig.origin}/${slug}`,
+        description,
+        image: meta.image,
+        datePublished: new Date(date).toISOString(),
+        dateModified: publishedDate.toISOString(),
+        author: {
+          "@type": "Person",
+          name: siteConfig.author,
+          url: `${siteConfig.origin}/#about`,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: siteConfig.name,
+          url: siteConfig.origin,
+        },
+      },
+    }}
+  />
   <BaseLayout class="min-h-dvh">
     <Container>
       <div class="text-left sm:text-center">

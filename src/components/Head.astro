@@ -1,0 +1,65 @@
+---
+import { SEO, type Props as SEOProps } from "astro-seo";
+import GoogleAnalytics from "@astro-kits/google-analytics";
+import siteConfig from "@site-config";
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import { ClientRouter } from "astro:transitions";
+import { deepMerge } from "@helpers";
+
+interface Props {
+  seoData?: SEOProps;
+}
+
+const currentSEOData: SEOProps = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+  canonical: Astro.url.href,
+  openGraph: {
+    basic: {
+      title: siteConfig.title,
+      type: "website",
+      url: Astro.url.href,
+      image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
+    },
+    optional: {
+      description: siteConfig.description,
+      siteName: siteConfig.name,
+      locale: "id",
+    },
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@MohamadAdithya",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    image: `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
+  },
+  extend: {
+    link: [
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: `${siteConfig.title} RSS Feed`,
+        href: new URL("rss.xml", Astro.site).href,
+      },
+      {
+        rel: "sitemap",
+        href: new URL("sitemap.xml", Astro.site).href,
+      },
+    ],
+  },
+};
+
+const { seoData = false } = Astro.props;
+const mergedSEOData = deepMerge(currentSEOData, seoData || {});
+---
+
+<SEO {...mergedSEOData} />
+<GoogleAnalytics />
+<GoogleFontsOptimizer
+  url="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600;700&display=swap"
+/>
+<GoogleFontsOptimizer
+  url="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap"
+/>
+<ClientRouter />

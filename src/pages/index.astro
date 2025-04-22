@@ -13,6 +13,7 @@ import ArticleList from "@components/sections/ArticleList.astro";
 import { contentfulClient, type BlogPost } from "@/lib/contentful";
 import { formatDate } from "@/helpers";
 import { getPostTags } from "@/lib/post.render";
+import Head from "@/components/Head.astro";
 
 const limit = 5;
 const entries = await contentfulClient.getEntries<BlogPost>({
@@ -40,6 +41,7 @@ const posts = await Promise.all(
 ---
 
 <Layout>
+  <Head slot="head" />
   <Schema
     slot="head"
     item={{

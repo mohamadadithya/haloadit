@@ -80,7 +80,7 @@
     bind:this={tocPanelMobileRef}
     in:fly={{ x: 100 }}
     out:fly={{ x: 100 }}
-    class="p-5 bg-base-200 w-full rounded-2xl max-w-72 shadow fixed bottom-5 right-5"
+    class="p-5 bg-base-200 w-full rounded-2xl max-w-72 shadow fixed bottom-5 right-5 z-[60]"
   >
     {@render tocList({ isShowCloseButton: true, isEnableOverflow: true })}
   </div>

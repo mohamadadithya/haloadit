@@ -14,14 +14,14 @@ const { post: { title, description, slug, date, tags } } = Astro.props;
   class="group p-5 bg-base-200 rounded-2xl"
 >
   <div>
-    <a href={`/${slug}`} transition:name={`title-${slug}`} class="font-semibold link link-hover text-primary text-lg sm:text-xl md:text-2xl font-lora inline-block mb-4">
+    <a href={`/${slug}`} class="font-semibold link link-hover text-primary text-lg sm:text-xl md:text-2xl font-lora inline-block mb-4">
       {title}
     </a>
     <div class="space-y-3">
       <p class="line-clamp-2">
         {description}
       </p>
-      <p aria-label="Date" class="text-sm text-muted" transition:name={`date-${slug}`}>Dipublikasikan pada {date}</p>
+      <p aria-label="Date" class="text-sm text-muted">Dipublikasikan pada {date}</p>
     </div>
     <TagList {tags} class="mt-4" />
   </div>

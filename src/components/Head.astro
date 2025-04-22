@@ -3,7 +3,6 @@ import { SEO, type Props as SEOProps } from "astro-seo";
 import GoogleAnalytics from "@astro-kits/google-analytics";
 import siteConfig from "@site-config";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
-import { ClientRouter } from "astro:transitions";
 import { deepMerge } from "@helpers";
 
 interface Props {
@@ -62,4 +61,3 @@ const mergedSEOData = deepMerge(currentSEOData, seoData || {});
 <GoogleFontsOptimizer
   url="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap"
 />
-<ClientRouter />

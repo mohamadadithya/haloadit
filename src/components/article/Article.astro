@@ -1,5 +1,4 @@
 ---
-import { slide } from "astro:transitions";
 import GLightbox from "./GLightbox.svelte";
 
 interface Props {
@@ -11,8 +10,6 @@ const { slug, content } = Astro.props;
 ---
 
 <article
-  transition:name={`article-${slug}`}
-  transition:animate={slide({ duration: 850 })}
   class="prose max-w-none"
   set:html={content}
 />

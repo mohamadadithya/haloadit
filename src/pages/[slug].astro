@@ -154,7 +154,6 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
     <Container>
       <div class="text-left sm:text-center">
         <h1
-          transition:name={`title-${slug}`}
           class="text-2xl sm:text-3xl md:text-4xl font-bold font-lora leading-normal text-pretty"
         >
           {title}
@@ -168,7 +167,6 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
         }
         <p
           class="mt-5 text-balance text-muted text-sm sm:text-base"
-          transition:name={`date-${slug}`}
         >
           {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span
             class="font-semibold">{formatDate(publishedDate.toString())}</span

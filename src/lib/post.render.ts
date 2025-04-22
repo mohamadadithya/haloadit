@@ -129,17 +129,17 @@ export function createShikiCodeBlock(html: string): string {
 }
 
 /**
- * Takes an HTML string and returns an object with two properties:
+ * Parse HTML and extract all headings (h2, h3, h4) and return an object with
+ * the HTML content and an array of TOC items. The TOC items have the following
+ * properties:
+ * - id: the slugified heading text
+ * - text: the heading text
+ * - level: the heading level (h2, h3, h4)
  *
- * - `html`: The input HTML with heading tags modified to have `id` attributes
- *   based on the heading text.
- * - `toc`: An array of objects representing a table of contents, where each
- *   object has `id`, `text`, and `level` properties.
+ * The function also sets the id attribute of each heading element in the
+ * parsed HTML to the slugified heading text.
  *
- * The `id` property is a slugified version of the heading text, and the `level`
- * property is either `"h2"` or `"h3"` based on the heading element's tag name.
- *
- * @param html - The input HTML string.
+ * @param html - The HTML string to parse.
  * @returns An object with `html` and `toc` properties.
  */
 function getTOCAndHTML(html: string): {
@@ -148,7 +148,7 @@ function getTOCAndHTML(html: string): {
 } {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
-  const headings = doc.querySelectorAll("h2, h3");
+  const headings = doc.querySelectorAll("h2, h3, h4");
 
   const toc = Array.from(headings).map((h) => {
     const slug = slugify(h.textContent ?? "", {
@@ -161,7 +161,7 @@ function getTOCAndHTML(html: string): {
     return {
       id: slug,
       text: h.textContent ?? "",
-      level: (h as HTMLElement).tagName.toLowerCase() as "h2" | "h3",
+      level: (h as HTMLElement).tagName.toLowerCase() as "h2" | "h3" | "h4",
     };
   });
 

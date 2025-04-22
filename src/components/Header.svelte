@@ -39,6 +39,7 @@
 <svelte:window onscroll={handleScroll} />
 
 <header
+  bind:clientHeight={headerStore.height}
   class="py-5 sticky top-0 z-50 duration-500 bg-base-100"
   class:show={isShow}
 >

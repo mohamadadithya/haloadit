@@ -6,6 +6,7 @@
   import ArrowRight from "@lucide/svelte/icons/arrow-right";
   import LayoutList from "@lucide/svelte/icons/layout-list";
   import { onClickOutside } from "runed";
+  import { innerHeight } from "svelte/reactivity/window";
 
   interface Props {
     items: TOCItem[];
@@ -13,7 +14,7 @@
 
   let { items }: Props = $props();
 
-  const { isScrollingDown } = $derived(headerStore);
+  const { isScrollingDown, height: headerHeight } = $derived(headerStore);
 
   let ref = $state<HTMLElement>(),
     tocPanelMobileRef = $state<HTMLElement>(),
@@ -50,6 +51,18 @@
     () => tocPanelMobileRef,
     () => (isOpenMobilePanel = false)
   );
+
+  let tocPanelHeaderHeight = $state<number>();
+
+  const tocMaxHeight = $derived.by(() => {
+    const windowHeight = innerHeight.current;
+
+    if (windowHeight && tocPanelHeaderHeight) {
+      return windowHeight - (headerHeight + tocPanelHeaderHeight + 20 + 60);
+    }
+
+    return 0;
+  });
 </script>
 
 <div
@@ -67,9 +80,9 @@
     bind:this={tocPanelMobileRef}
     in:fly={{ x: 100 }}
     out:fly={{ x: 100 }}
-    class="p-5 bg-base-200 w-full rounded-2xl max-w-72 shadow fixed top-2/4 -translate-y-2/4 right-5"
+    class="p-5 bg-base-200 w-full rounded-2xl max-w-72 shadow fixed bottom-5 right-5"
   >
-    {@render tocList({ isShowCloseButton: true })}
+    {@render tocList({ isShowCloseButton: true, isEnableOverflow: true })}
   </div>
 {:else if !isOpenMobilePanel && isShowTOCButton}
   <div class="fixed top-2/4 -translate-y-2/4 right-5">
@@ -87,11 +100,18 @@
 {/if}
 
 {#snippet tocList(
-  { isShowCloseButton }: { isShowCloseButton: boolean } = {
+  {
+    isShowCloseButton,
+    isEnableOverflow,
+  }: { isShowCloseButton: boolean; isEnableOverflow?: boolean } = {
     isShowCloseButton: false,
+    isEnableOverflow: false,
   }
 )}
-  <div class="flex items-center gap-3 justify-between mb-4">
+  <div
+    class="flex items-center gap-3 justify-between mb-4"
+    bind:clientHeight={tocPanelHeaderHeight}
+  >
     <p class="font-lora font-semibold text-primary uppercase">Daftar Isi</p>
     {#if isShowCloseButton}
       <button
@@ -105,11 +125,20 @@
       </button>
     {/if}
   </div>
-  <ul class="space-y-3 text-sm">
+  <ul
+    class="space-y-4 text-sm"
+    class:overflow-y-auto={isEnableOverflow}
+    class:overscroll-y-contain={isEnableOverflow}
+    style="max-height: {tocMaxHeight}px"
+  >
     {#each items as { id, text, level }}
-      <li class:list-disc={level !== "h2"} class:ml-6={level !== "h2"}>
+      <li
+        class:list-disc={level !== "h2"}
+        class:ml-6={level === "h3"}
+        class:ml-12={level === "h4"}
+      >
         <a href={`#${id}`} class="link link-hover">
-          {text}
+          <p class="text-pretty">{text}</p>
         </a>
       </li>
     {/each}

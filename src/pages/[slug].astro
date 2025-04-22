@@ -178,7 +178,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
       <TagList {tags} class="mt-4 max-w-fit sm:mx-auto" />
       {
         coverImage && (
-          <div class="my-8 space-y-4 text-center">
+          <div class="mt-8 space-y-4 text-center">
             <a href={coverImage.src} class="glightbox">
               <Image
                 src={coverImage.src}
@@ -200,7 +200,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
           </div>
         )
       }
-      <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
+      <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-10">
         <div class="w-full max-w-3.5xl lg:max-w-prose">
           <Article {content} {slug} />
           <div class="mt-6 border-t pt-8 border-muted">

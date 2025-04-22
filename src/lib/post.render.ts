@@ -38,6 +38,28 @@ async function renderWithShiki(doc: Document): Promise<string> {
       const highlighted = await highlightCode(code as string, lang as string);
 
       htmlParts.push(highlighted);
+    } else if (node.nodeType === BLOCKS.EMBEDDED_ASSET) {
+      const target = node.data.target as AssetUnresolvedLink;
+      const imageObject = await getImageObject(target);
+
+      if (!imageObject) {
+        console.warn("No image object found for embedded asset");
+        continue;
+      }
+
+      const { src, description, width, height } = imageObject;
+      const imageTemplate = `<a href=${src} class="glightbox">
+              <img
+                src=${src}
+                alt=${description}
+                width=${width}
+                height=${height}
+                loading="lazy"
+                class="w-full h-auto rounded-md"
+              />
+            </a>`;
+
+      htmlParts.push(imageTemplate);
     } else {
       const rendered = documentToHtmlString({ ...doc, content: [node] });
       htmlParts.push(rendered);
@@ -173,24 +195,16 @@ function getPostTags(entryLinks: TagUnresolvedLink[]) {
 }
 
 /**
- * Retrieves a cover image object from a Contentful AssetEntryLink.
+ * Retrieves an image object from a Contentful AssetUnresolvedLink object.
  *
- * If the `image` parameter is not null, this function asynchronously fetches
- * the linked asset entry using the Contentful client and constructs an object
- * with the `src`, `description`, `width`, and `height` properties.
+ * If the input `image` is null or undefined, the function returns null.
+ * Otherwise, it fetches the associated Contentful asset and constructs an
+ * object with `src`, `description`, `width`, and `height` properties.
  *
- * The `src` property is a normalized URL string from the asset's `file.url`.
- * The `description` property is the asset's `fields.description` string.
- * The `width` and `height` properties are the asset's `fields.file.details.image`
- * width and height numbers, respectively, or fallback values of 1500 and 1000
- * if the asset does not have image details.
- *
- * @param image - A `TagEntryLink` object representing a link to a Contentful
- *                asset entry.
- * @returns An object with `src`, `description`, `width`, and `height` properties,
- *          or null if the input is null.
+ * @param image - The input Contentful AssetUnresolvedLink object, or null/undefined if no image is associated.
+ * @returns An object with image properties, or null if the input is null/undefined.
  */
-async function getPostCoverImage(image: AssetUnresolvedLink | null) {
+async function getImageObject(image: AssetUnresolvedLink | null) {
   let imageObject: null | {
     src: string;
     description: string;
@@ -214,4 +228,4 @@ async function getPostCoverImage(image: AssetUnresolvedLink | null) {
   return imageObject;
 }
 
-export { renderWithShiki, renderPostContent, getPostTags, getPostCoverImage };
+export { renderWithShiki, renderPostContent, getPostTags, getImageObject };

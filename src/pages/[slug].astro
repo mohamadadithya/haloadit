@@ -6,16 +6,16 @@ import { contentfulClient, type BlogPost } from "@contentful";
 import { formatDate } from "@helpers";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Layout from "@layouts/Layout.astro";
-import { slide } from "astro:transitions";
 import { renderPostContent } from "@lib/post.render";
 import { Image } from "astro:assets";
 import siteConfig from "@/site.config";
 import ReadingProgress from "@components/article/ReadingProgress.svelte";
-import { getPostTags, getPostCoverImage } from "@lib/post.render";
+import { getPostTags, getImageObject } from "@lib/post.render";
 import Giscus from "@components/article/Giscus.astro";
 import Sharer from "@components/article/Sharer.astro";
 import Head from "@/components/Head.astro";
 import { Schema } from "astro-seo-schema";
+import Article from "@/components/article/Article.astro";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -37,7 +37,7 @@ export async function getStaticPaths() {
       } = item;
 
       const tags = await Promise.all(getPostTags(tagEntryLinks));
-      const coverImage = await getPostCoverImage(image);
+      const coverImage = await getImageObject(image);
       const { html, toc } = await renderPostContent(content);
 
       return {
@@ -179,17 +179,19 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
       {
         coverImage && (
           <div class="my-8 space-y-4 text-center">
-            <Image
-              src={coverImage.src}
-              alt={title}
-              width={coverImage.width}
-              height={coverImage.height}
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-              layout="full-width"
-              class="w-full h-auto rounded-xl"
-            />
+            <a href={coverImage.src} class="glightbox">
+              <Image
+                src={coverImage.src}
+                alt={title}
+                width={coverImage.width}
+                height={coverImage.height}
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                layout="full-width"
+                class="w-full h-auto rounded-xl"
+              />
+            </a>
             {coverImage.description && (
               <p aria-label="Image description" class="text-sm text-muted mt-5">
                 {coverImage.description}
@@ -200,12 +202,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
       }
       <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-8">
         <div class="w-full max-w-3.5xl lg:max-w-prose">
-          <article
-            transition:name={`article-${slug}`}
-            transition:animate={slide({ duration: 850 })}
-            class="prose max-w-none"
-            set:html={content}
-          />
+          <Article {content} {slug} />
           <div class="mt-6 border-t pt-8 border-muted">
             <div class="mb-10 flex items-center gap-5 flex-wrap">
               <p class="font-medium">Bagikan artikel ini ke:</p>
@@ -225,37 +222,3 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
 </Layout>
 
 <ReadingProgress client:load />
-
-<script>
-  const copyCodeButtons = document.querySelectorAll(
-    ".code-block-wrapper__copy-button"
-  );
-
-  copyCodeButtons.forEach((button) => {
-    button.addEventListener("click", handleCopyCodeBlock);
-  });
-
-  /**
-   * Handles the copy code block functionality.
-   * @param {Event} event - The event triggered by clicking the copy button.
-   */
-  function handleCopyCodeBlock(event: Event): void {
-    const target = event.currentTarget as HTMLButtonElement;
-    const code: string | null =
-      target.dataset.clipboardCode ||
-      target.getAttribute("data-clipboard-code");
-
-    if (code) {
-      navigator.clipboard.writeText(code);
-      target.innerHTML = `Disalin <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m12 15l2 2l4-4"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
-
-      target.classList.remove("btn-square");
-
-      setTimeout(() => {
-        target.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
-
-        target.classList.add("btn-square");
-      }, 1500);
-    }
-  }
-</script>

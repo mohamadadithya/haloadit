@@ -2,6 +2,7 @@ import {
   contentfulClient,
   type AssetUnresolvedLink,
   type CodeBlockEntry,
+  type MermaidBlockEntry,
   type TagUnresolvedLink,
 } from "@contentful";
 import { BLOCKS, type Document } from "@contentful/rich-text-types";
@@ -28,16 +29,24 @@ async function renderWithShiki(doc: Document): Promise<string> {
   const htmlParts: string[] = [];
 
   for (const node of doc.content) {
-    if (
-      node.nodeType === BLOCKS.EMBEDDED_ENTRY &&
-      node.data?.target?.sys?.contentType?.sys?.id === "codeBlock"
-    ) {
-      const target = node.data.target as CodeBlockEntry;
-      const code = target.fields.code;
-      const lang = target.fields.language || "text";
-      const highlighted = await highlightCode(code as string, lang as string);
+    if (node.nodeType === BLOCKS.EMBEDDED_ENTRY) {
+      const nodeId = node.data?.target?.sys?.contentType?.sys?.id;
 
-      htmlParts.push(highlighted);
+      if (nodeId === "codeBlock") {
+        const target = node.data.target as CodeBlockEntry;
+        const code = target.fields.code;
+        const lang = target.fields.language || "text";
+        const highlighted = await highlightCode(code as string, lang as string);
+
+        htmlParts.push(highlighted);
+      } else if (nodeId === "mermaidBlock") {
+        const target = node.data.target as MermaidBlockEntry;
+        const code = target.fields.code;
+
+        htmlParts.push(`
+           <div class="mermaid" data-mermaid>${code}</div>
+          `);
+      }
     } else if (node.nodeType === BLOCKS.EMBEDDED_ASSET) {
       const target = node.data.target as AssetUnresolvedLink;
       const imageObject = await getImageObject(target);

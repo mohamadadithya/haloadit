@@ -1,0 +1,33 @@
+<script>
+    const copyCodeButtons = document.querySelectorAll(
+      ".code-block-wrapper__copy-button"
+    );
+  
+    copyCodeButtons.forEach((button) => {
+      button.addEventListener("click", handleCopyCodeBlock);
+    });
+  
+    /**
+     * Handles the copy code block functionality.
+     * @param {Event} event - The event triggered by clicking the copy button.
+     */
+    function handleCopyCodeBlock(event: Event): void {
+      const target = event.currentTarget as HTMLButtonElement;
+      const code: string | null =
+        target.dataset.clipboardCode ||
+        target.getAttribute("data-clipboard-code");
+  
+      if (code) {
+        navigator.clipboard.writeText(code);
+        target.innerHTML = `Disalin <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m12 15l2 2l4-4"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
+  
+        target.classList.remove("btn-square");
+  
+        setTimeout(() => {
+          target.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></g></svg>`;
+  
+          target.classList.add("btn-square");
+        }, 1500);
+      }
+    }
+  </script>

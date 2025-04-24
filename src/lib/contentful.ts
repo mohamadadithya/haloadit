@@ -39,12 +39,21 @@ interface CodeBlock {
   };
 }
 
+interface MermaidBlock {
+  contentTypeId: "mermaidBlock";
+  fields: {
+    title: EntryFieldTypes.Text;
+    code: EntryFieldTypes.Text;
+  };
+}
+
 interface TagItem {
   name: string;
   slug: PostListItem["slug"];
 }
 
 type CodeBlockEntry = Entry<CodeBlock>;
+type MermaidBlockEntry = Entry<MermaidBlock>;
 type TagUnresolvedLink =
   | UnresolvedLink<"Entry">
   | Entry<Tag, undefined, string>;
@@ -53,6 +62,7 @@ type AssetUnresolvedLink = UnresolvedLink<"Asset"> | Asset<undefined, string>;
 export { contentfulClient };
 export type {
   CodeBlockEntry,
+  MermaidBlockEntry,
   BlogPost,
   TagItem,
   TagUnresolvedLink,

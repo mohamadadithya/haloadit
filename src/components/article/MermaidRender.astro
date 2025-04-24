@@ -5,9 +5,14 @@
     if (mermaidLoaded) return (window as any).mermaid;
 
     const mermaid = (await import("mermaid")).default;
-    mermaid.initialize({ startOnLoad: false });
-    mermaidLoaded = true;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: prefersDark ? "dark" : "default",
+    });
+
+    mermaidLoaded = true;
     return mermaid;
   }
 

@@ -28,6 +28,7 @@ interface BlogPost {
     content: EntryFieldTypes.RichText;
     slug: EntryFieldTypes.Text;
     tags: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<Tag>>;
+    relatedPosts: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<BlogPost>>;
   };
 }
 

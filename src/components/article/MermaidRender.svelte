@@ -21,13 +21,13 @@
   }
 
   async function renderVisibleMermaid() {
+    const mermaid = await loadMermaid();
     const blocks = document.querySelectorAll("[data-mermaid]");
     const observer = new IntersectionObserver(async (entries, obs) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
 
         const el = entry.target;
-        const mermaid = await loadMermaid();
 
         try {
           const svgId = `mermaid-${Math.random().toString(36).slice(2, 10)}`;

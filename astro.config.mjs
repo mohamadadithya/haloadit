@@ -7,7 +7,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
 import spotlightjs from '@spotlightjs/astro';
-import playformCompress from '@playform/compress';
 import playformInline from '@playform/inline';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
@@ -16,7 +15,7 @@ import { imageService } from '@unpic/astro/service';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://haloadit.com',
-  integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformCompress(), playformInline(), partytown({
+  integrations: [svelte(), mdx(), sitemap(), sentry(), spotlightjs(), playformInline(), partytown({
     config: {
       forward: ['dataLayer.push', 'gtag']
     }

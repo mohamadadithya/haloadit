@@ -1,6 +1,6 @@
 ---
 import GLightbox from "./GLightbox.svelte";
-import MermaidRender from "./MermaidRender.astro";
+import MermaidRender from "./MermaidRender.svelte";
 import CodeblockRender from "./CodeblockRender.astro";
 
 interface Props {
@@ -14,5 +14,5 @@ const { content } = Astro.props;
 <article class="prose max-w-none" set:html={content} />
 
 <GLightbox client:only />
-<MermaidRender />
+<MermaidRender client:only />
 <CodeblockRender />

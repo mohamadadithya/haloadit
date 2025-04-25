@@ -1,11 +1,15 @@
-<script>
-  let mermaidLoaded = false;
+<script lang="ts">
+  import { onDestroy, onMount } from "svelte";
+
+  let mermaidLoaded = $state(false);
 
   async function loadMermaid() {
     if (mermaidLoaded) return (window as any).mermaid;
 
     const mermaid = (await import("mermaid")).default;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
 
     mermaid.initialize({
       startOnLoad: false,
@@ -41,5 +45,8 @@
     blocks.forEach((el) => observer.observe(el));
   }
 
-  document.addEventListener("DOMContentLoaded", renderVisibleMermaid);
+  onMount(renderVisibleMermaid);
+  onDestroy(() => {
+    mermaidLoaded = false;
+  });
 </script>

@@ -42,10 +42,9 @@ async function renderWithShiki(doc: Document): Promise<string> {
       } else if (nodeId === "mermaidBlock") {
         const target = node.data.target as MermaidBlockEntry;
         const code = target.fields.code;
+        const html = `<div class="mermaid" data-mermaid>${code}</div>`;
 
-        htmlParts.push(`
-           <div class="mermaid" data-mermaid>${code}</div>
-          `);
+        htmlParts.push(html);
       }
     } else if (node.nodeType === BLOCKS.EMBEDDED_ASSET) {
       const target = node.data.target as AssetUnresolvedLink;

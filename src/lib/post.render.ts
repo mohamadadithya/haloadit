@@ -1,91 +1,140 @@
 import {
   contentfulClient,
   type AssetUnresolvedLink,
-  type CodeBlockEntry,
-  type MermaidBlockEntry,
   type TagUnresolvedLink,
 } from "@contentful";
-import { BLOCKS, type Document } from "@contentful/rich-text-types";
+import { BLOCKS, INLINES, type Document } from "@contentful/rich-text-types";
 import { highlightCode } from "./shiki";
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import {
+  documentToHtmlString,
+  type Options,
+} from "@contentful/rich-text-html-renderer";
 import { JSDOM } from "jsdom";
 import slugify from "slugify";
 import type { TOCItem } from "@/types";
 import { normalizeImageUrl } from "@/helpers";
 
+// Track async replacements
+const asyncBlocks: Record<string, Promise<string>> = {};
+
+let counter = 0;
+
 /**
- * Render a Contentful rich text document, replacing code blocks with
- * syntax-highlighted HTML.
+ * Creates a placeholder for an asynchronous replacement.
+ * @param promise The promise to replace the placeholder with.
+ * @returns A unique string that can be used as a placeholder.
+ */
+function createAsyncPlaceholder(promise: Promise<string>) {
+  const id = `__ASYNC_BLOCK_${counter++}__`;
+  asyncBlocks[id] = promise;
+  return id;
+}
+
+/**
+ * Replaces placeholders in the HTML string with the results of asynchronous operations.
+ *
+ * This function takes an HTML string containing placeholders and replaces each
+ * placeholder with the result of its corresponding asynchronous operation.
+ * The operations are stored in the `asyncBlocks` object, and the function
+ * resolves all promises before performing the replacements.
+ *
+ * @param html - The HTML string containing placeholders for asynchronous content.
+ * @returns A promise that resolves to the HTML string with all placeholders replaced by their resolved content.
+ */
+
+async function replaceAsync(html: string): Promise<string> {
+  const entries = Object.entries(asyncBlocks);
+  const results = await Promise.all(entries.map(([_, promise]) => promise));
+
+  for (let i = 0; i < entries.length; i++) {
+    html = html.replace(entries[i][0], results[i]);
+  }
+
+  return html;
+}
+
+/**
+ * Render a Contentful blog post, using the `renderContent` function to render
+ * the rich text document and `getTOCAndHTML` to generate a table of contents.
  *
  * @param doc The document to render.
- * @returns A string of rendered HTML.
+ * @returns An HTML string representing the rendered document.
  */
-async function renderWithShiki(doc: Document): Promise<string> {
+async function renderContent(doc: Document): Promise<string> {
   if (!doc || !Array.isArray(doc.content)) {
     console.warn("Invalid rich text Document passed");
     return "";
   }
 
-  const htmlParts: string[] = [];
-
-  for (const node of doc.content) {
-    if (node.nodeType === BLOCKS.EMBEDDED_ENTRY) {
+  const renderNode: Options["renderNode"] = {
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
       const nodeId = node.data?.target?.sys?.contentType?.sys?.id;
 
       if (nodeId === "codeBlock") {
-        const target = node.data.target as CodeBlockEntry;
-        const code = target.fields.code;
-        const lang = target.fields.language || "text";
-        const highlighted = await highlightCode(code as string, lang as string);
-
-        htmlParts.push(highlighted);
-      } else if (nodeId === "mermaidBlock") {
-        const target = node.data.target as MermaidBlockEntry;
-        const code = target.fields.code;
-        const html = `<div class="mermaid" data-mermaid>${code}</div>`;
-
-        htmlParts.push(html);
-      }
-    } else if (node.nodeType === BLOCKS.EMBEDDED_ASSET) {
-      const target = node.data.target as AssetUnresolvedLink;
-      const imageObject = await getImageObject(target);
-
-      if (!imageObject) {
-        console.warn("No image object found for embedded asset");
-        continue;
+        const code = node.data.target.fields.code;
+        const lang = node.data.target.fields.language || "text";
+        return createAsyncPlaceholder(highlightCode(code, lang));
       }
 
-      const { src, description, width, height } = imageObject;
-      const imageTemplate = `<a href=${src} class="glightbox">
-              <img
-                src=${src}
-                alt=${description}
-                width=${width}
-                height=${height}
-                loading="lazy"
-                class="w-full h-auto rounded-md"
-              />
-            </a>`;
+      if (nodeId === "mermaidBlock") {
+        const code = node.data.target.fields.code;
+        return `<div class="mermaid" data-mermaid>${code}</div>`;
+      }
 
-      htmlParts.push(imageTemplate);
-    } else {
-      const rendered = documentToHtmlString({ ...doc, content: [node] });
-      htmlParts.push(rendered);
-    }
-  }
+      return "embedded-entry-block-not-defined";
+    },
 
-  return htmlParts.join("");
+    [INLINES.ENTRY_HYPERLINK]: (node) => {
+      const nodeId = node.data?.target?.sys?.contentType?.sys?.id;
+
+      if (nodeId === "blogPost") {
+        const { title, slug }: { title: string; slug: string } =
+          node.data.target.fields;
+
+        return `<a href="/${slug}" class="link link-hover">${title}</a>`;
+      }
+
+      return "entry-hyperlink-not-defined";
+    },
+
+    [BLOCKS.EMBEDDED_ASSET]: (node) => {
+      const asset = node.data.target;
+      return createAsyncPlaceholder(
+        (async () => {
+          const imageObject = await getImageObject(asset);
+          if (!imageObject) return "";
+
+          const { src, description, width, height } = imageObject;
+          return `<a href="${src}" class="glightbox">
+            <img
+              src="${src}"
+              alt="${description}"
+              width="${width}"
+              height="${height}"
+              loading="lazy"
+              class="w-full h-auto rounded-md"
+            />
+          </a>`;
+        })()
+      );
+    },
+  };
+
+  let html = documentToHtmlString(doc, { renderNode });
+
+  html = await replaceAsync(html);
+  return html;
 }
 
 /**
- * Render a Contentful blog post, using the `renderWithShiki` function to render
+ * Render a Contentful blog post, using the `renderContent` function to render
  * the rich text document and `getTOCAndHTML` to generate a table of contents.
  *
  * @param doc The document to render.
  * @returns An object with `html` and `toc` properties.
  */
 async function renderPostContent(doc: Document) {
-  const { html, toc } = getTOCAndHTML(await renderWithShiki(doc));
+  const { html, toc } = getTOCAndHTML(await renderContent(doc));
   const htmlContent = createShikiCodeBlock(html);
 
   return {
@@ -236,4 +285,4 @@ async function getImageObject(image: AssetUnresolvedLink | null) {
   return imageObject;
 }
 
-export { renderWithShiki, renderPostContent, getPostTags, getImageObject };
+export { renderContent, renderPostContent, getPostTags, getImageObject };

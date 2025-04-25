@@ -58,6 +58,11 @@ type MermaidBlockEntry = Entry<MermaidBlock>;
 type TagUnresolvedLink =
   | UnresolvedLink<"Entry">
   | Entry<Tag, undefined, string>;
+
+type BlogPostUnresolvedLink =
+  | UnresolvedLink<"Entry">
+  | Entry<BlogPost, undefined, string>;
+
 type AssetUnresolvedLink = UnresolvedLink<"Asset"> | Asset<undefined, string>;
 
 export { contentfulClient };
@@ -68,4 +73,5 @@ export type {
   TagItem,
   TagUnresolvedLink,
   AssetUnresolvedLink,
+  BlogPostUnresolvedLink,
 };

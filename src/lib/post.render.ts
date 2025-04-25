@@ -1,6 +1,7 @@
 import {
   contentfulClient,
   type AssetUnresolvedLink,
+  type BlogPostUnresolvedLink,
   type TagUnresolvedLink,
 } from "@contentful";
 import { BLOCKS, INLINES, type Document } from "@contentful/rich-text-types";
@@ -252,6 +253,31 @@ function getPostTags(entryLinks: TagUnresolvedLink[]) {
 }
 
 /**
+ * Retrieves an array of objects, each containing `title` and `slug` properties,
+ * from an array of Contentful BlogPostUnresolvedLink objects.
+ *
+ * This function asynchronously fetches the related blog posts using the
+ * Contentful client and constructs an array of objects with `title` and
+ * `slug` properties for each post.
+ *
+ * @param entryLinks - An array of `BlogPostUnresolvedLink` objects representing links to Contentful blog post entries.
+ * @returns A promise that resolves to an array of objects, each containing a `title` and `slug` property of a related blog post.
+ */
+function getRelatedPosts(entryLinks: BlogPostUnresolvedLink[]) {
+  return Array.isArray(entryLinks)
+    ? entryLinks.map(async (postEntryLink) => {
+        const post = await contentfulClient.getEntry(postEntryLink.sys.id);
+
+        return {
+          title: post.fields.title as string,
+          description: post.fields.description as string,
+          slug: post.fields.slug as string,
+        };
+      })
+    : [];
+}
+
+/**
  * Retrieves an image object from a Contentful AssetUnresolvedLink object.
  *
  * If the input `image` is null or undefined, the function returns null.
@@ -285,4 +311,10 @@ async function getImageObject(image: AssetUnresolvedLink | null) {
   return imageObject;
 }
 
-export { renderContent, renderPostContent, getPostTags, getImageObject };
+export {
+  renderContent,
+  renderPostContent,
+  getPostTags,
+  getImageObject,
+  getRelatedPosts,
+};

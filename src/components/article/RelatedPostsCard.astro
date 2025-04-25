@@ -1,0 +1,30 @@
+---
+import { cn } from "@/helpers";
+import type { PostListItem } from "@/types";
+
+interface Props {
+  posts: Pick<PostListItem, "title" | "slug">[];
+  class?: string;
+}
+
+const { posts, class: className = '' } = Astro.props;
+---
+
+<div class={cn("card bg-base-200", className)}>
+  <div class="card-body">
+    <h2 class="card-title text-primary font-lora">Tulisan Terkait</h2>
+    {
+      posts.length && (
+        <ul class={posts.length > 1 ? "list-disc" : ""}>
+          {posts.map(({ title, slug }) => (
+            <li>
+              <a class="link link-hover" href={`/${slug}`}>
+                {title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</div>

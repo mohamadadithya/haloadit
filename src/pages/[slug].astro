@@ -16,6 +16,8 @@ import Sharer from "@components/article/Sharer.astro";
 import Head from "@/components/Head.astro";
 import { Schema } from "astro-seo-schema";
 import Article from "@/components/article/Article.astro";
+import { getRelatedPosts } from "@lib/post.render";
+import RelatedPostsCard from "@/components/article/RelatedPostsCard.astro";
 
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
@@ -33,10 +35,14 @@ export async function getStaticPaths() {
           slug,
           image,
           tags: tagEntryLinks,
+          relatedPosts: relatedPostEntryLinks,
         },
       } = item;
 
       const tags = await Promise.all(getPostTags(tagEntryLinks));
+      const relatedPosts = await Promise.all(
+        getRelatedPosts(relatedPostEntryLinks)
+      );
       const coverImage = await getImageObject(image);
       const { html, toc } = await renderPostContent(content);
 
@@ -50,6 +56,7 @@ export async function getStaticPaths() {
           coverImage,
           date,
           slug,
+          relatedPosts,
           content: html,
           updatedAt: item.sys.updatedAt,
         },
@@ -70,6 +77,7 @@ const {
   slug,
   coverImage,
   updatedAt,
+  relatedPosts
 } = Astro.props;
 
 const meta = {
@@ -165,9 +173,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
             </p>
           )
         }
-        <p
-          class="mt-5 text-balance text-muted text-sm sm:text-base"
-        >
+        <p class="mt-5 text-balance text-muted text-sm sm:text-base">
           {isNotModified ? "Dipublikasikan" : "Diperbarui"} pada <span
             class="font-semibold">{formatDate(publishedDate.toString())}</span
           >
@@ -201,6 +207,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
       <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-10">
         <div class="w-full max-w-3.5xl lg:max-w-prose">
           <Article {content} {slug} />
+          {relatedPosts.length && <RelatedPostsCard class="mt-6" posts={relatedPosts} />}
           <div class="mt-6 border-t pt-8 border-muted">
             <div class="mb-10 flex items-center gap-5 flex-wrap">
               <p class="font-medium">Bagikan artikel ini ke:</p>

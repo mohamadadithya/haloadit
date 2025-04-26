@@ -1,6 +1,5 @@
 <script lang="ts">
   import { cn } from "@helpers";
-  import InboxDropdown from "./inbox-dropdown/Dropdown.svelte";
   import Settings from "@lucide/svelte/icons/settings";
 
   interface Props {
@@ -11,7 +10,6 @@
 </script>
 
 <div class="flex items-center gap-2 {cn(className)}">
-  <InboxDropdown />
   <div class="lg:tooltip lg:tooltip-bottom" data-tip="Pengaturan">
     <button
       type="button"

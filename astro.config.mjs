@@ -12,6 +12,8 @@ import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import { imageService } from '@unpic/astro/service';
 
+import zserviceWorker from 'zastro-service-worker';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://haloadit.com',
@@ -26,7 +28,7 @@ export default defineConfig({
       uil: ["*"],
       bi: ["twitter-x"]
     }
-  })],
+  }), zserviceWorker()],
   vite: {
     plugins: [tailwindcss()]
   },

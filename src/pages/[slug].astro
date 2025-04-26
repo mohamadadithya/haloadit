@@ -208,7 +208,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
         <div class="w-full max-w-3.5xl lg:max-w-prose">
           <Article {content} {slug} />
           {relatedPosts.length > 0 && <RelatedPostsCard class="mt-6" posts={relatedPosts} />}
-          <div class="mt-6 border-t pt-8 border-muted">
+          <div class="mt-6 border-t pt-8 border-dashed border-primary">
             <div class="mb-10 flex items-center gap-5 flex-wrap">
               <p class="font-medium">Bagikan artikel ini ke:</p>
               <Sharer

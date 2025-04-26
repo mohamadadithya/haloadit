@@ -20,6 +20,7 @@
   --font-lora: "Lora", serif;
   --color-muted: var(--color-gray-400);
   --container-3.5xl: 53rem;
+  --breakpoint-pre-sm: 33.75rem;
 }
 
 @utility heading-font {

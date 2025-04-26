@@ -44,31 +44,35 @@
   class:show={isShow}
 >
   <Container
-    class="flex md:items-center justify-between flex-col gap-6 md:flex-row"
+    class="flex sm:items-center justify-between flex-col gap-5 sm:flex-row"
   >
     <div class="flex items-center justify-between">
       <a href="/">
         <p class="text-2xl font-lora font-semibold">Halo Adit 👋</p>
         <p class="text-xs">by {siteConfig.author}</p>
       </a>
-      <HeaderActions class="md:hidden" />
+      <HeaderActions class="sm:hidden" />
     </div>
-    <nav>
-      <ul class="flex justify-center items-center gap-6">
-        {#each mainLinks as { label, href, isExternal }}
-          <li>
-            <a
-              {href}
-              target={isExternal ? "_blank" : "_self"}
-              rel={isExternal ? "noopener noreferrer" : ""}
-            >
-              {label}
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </nav>
-    <HeaderActions class="hidden md:flex" />
+    <div class="flex items-center gap-5">
+      <nav
+        class="border-t pt-5 sm:border-0 sm:pt-0 border-dashed border-primary w-full sm:border-r sm:pr-5 sm:border-primary"
+      >
+        <ul class="flex justify-center items-center gap-8">
+          {#each mainLinks as { label, href, isExternal }}
+            <li>
+              <a
+                {href}
+                target={isExternal ? "_blank" : "_self"}
+                rel={isExternal ? "noopener noreferrer" : ""}
+              >
+                {label}
+              </a>
+            </li>
+          {/each}
+        </ul>
+      </nav>
+      <HeaderActions class="hidden sm:flex" />
+    </div>
   </Container>
 </header>
 

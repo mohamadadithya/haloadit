@@ -112,7 +112,7 @@
     class="flex items-center gap-3 justify-between mb-4"
     bind:clientHeight={tocPanelHeaderHeight}
   >
-    <p class="font-lora font-semibold text-primary uppercase">Daftar Isi</p>
+    <p class="heading-font text-primary uppercase">Daftar Isi</p>
     {#if isShowCloseButton}
       <button
         type="button"

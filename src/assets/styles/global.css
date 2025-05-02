@@ -17,7 +17,7 @@
 
 @theme {
   --font-inter: "Inter", sans-serif;
-  --font-lora: "Lora", serif;
+  --font-cal-sans: "Cal Sans", sans-serif;
   --color-muted: var(--color-gray-400);
   --container-3.5xl: 53rem;
   --breakpoint-pre-sm: 33.75rem;
@@ -25,7 +25,7 @@
 }
 
 @utility heading-font {
-  @apply font-lora font-semibold text-balance leading-normal;
+  @apply font-cal-sans text-balance leading-normal tracking-wider;
 }
 
 @utility section-title {

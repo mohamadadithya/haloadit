@@ -94,7 +94,7 @@ const posts = await Promise.all(
                 Halo, Saya {siteConfig.author}. 👋
               </p>
               <h1
-                class="text-3xl font-bold md:text-4xl lg:text-5xl leading-normal font-lora text-balance"
+                class="text-3xl md:text-4xl lg:text-5xl heading-font"
               >
                 Developer. Designer. Writer. Enthusiast.
               </h1>
@@ -123,19 +123,19 @@ const posts = await Promise.all(
     <AboutSection />
     {
       posts.length > 0 && (
-        <div class="py-8 md:py-10 min-h-dvh" id="writing">
+        <div class="py-8 md:py-10 min-h-dvh" id="writings">
           <Container>
             <div class="flex items-center justify-between mb-5 flex-wrap gap-4">
               <h2 class="section-title ">Tulisan Terbaru</h2>
-              {total > limit && (
+              {/* {total > limit && (
                 <a
-                  href="/writing"
+                  href="/writings"
                   class="btn btn-primary btn-block xs:max-w-fit"
                 >
                   Semua Tulisan
                   <Icon name="mdi:arrow-right" class="size-5" />
                 </a>
-              )}
+              )} */}
             </div>
             {posts.length > 0 && <ArticleList {posts} />}
           </Container>

@@ -11,7 +11,7 @@
     },
     {
       label: "✍️ Tulisan",
-      href: "/#writing",
+      href: "/#writings",
     },
     {
       label: "🗒️ Resume",
@@ -48,7 +48,7 @@
   >
     <div class="flex items-center justify-between">
       <a href="/">
-        <p class="text-2xl font-lora font-semibold">Halo Adit 👋</p>
+        <p class="text-2xl heading-font">Halo Adit 👋</p>
         <p class="text-xs">by {siteConfig.author}</p>
       </a>
       <HeaderActions class="sm:hidden" />

@@ -14,10 +14,9 @@ import { contentfulClient, type BlogPost } from "@/lib/contentful";
 import { formatDate } from "@/helpers";
 import { getPostTags } from "@/lib/post.render";
 import Head from "@/components/Head.astro";
-import { Icon } from "astro-icon/components";
 
 const limit = 3;
-const { items, total } = await contentfulClient.getEntries<BlogPost>({
+const { items } = await contentfulClient.getEntries<BlogPost>({
   content_type: "blogPost",
   limit,
 });
@@ -93,9 +92,7 @@ const posts = await Promise.all(
               >
                 Halo, Saya {siteConfig.author}. 👋
               </p>
-              <h1
-                class="text-3xl md:text-4xl lg:text-5xl heading-font"
-              >
+              <h1 class="text-3xl md:text-4xl lg:text-5xl heading-font">
                 Developer. Designer. Writer. Enthusiast.
               </h1>
             </div>
@@ -123,9 +120,12 @@ const posts = await Promise.all(
     <AboutSection />
     {
       posts.length > 0 && (
-        <div class="py-8 md:py-10 min-h-dvh" id="writings">
+        <div class="py-8 md:py-10 min-h-dvh">
           <Container>
-            <div class="flex items-center justify-between mb-5 flex-wrap gap-4">
+            <div
+              class="flex items-center justify-between mb-5 flex-wrap gap-4"
+              id="writings"
+            >
               <h2 class="section-title ">Tulisan Terbaru</h2>
               {/* {total > limit && (
                 <a

@@ -20,28 +20,17 @@
     },
   ];
 
-  const { isScrollingDown, handleScroll } = $derived(headerStore);
-
-  let isOnHome = $state(false);
-
   $effect(() => {
-    isOnHome = location.pathname === "/";
-
-    return () => {
-      isOnHome = false;
-      headerStore.isScrollingDown = false;
-    };
+    document.documentElement.style.setProperty(
+      "--header-height",
+      `${headerStore.height}px`
+    );
   });
-
-  const isShow = $derived((!isScrollingDown && !isOnHome) || isOnHome);
 </script>
-
-<svelte:window onscroll={handleScroll} />
 
 <header
   bind:clientHeight={headerStore.height}
   class="py-5 sticky top-0 z-50 duration-500 bg-base-100"
-  class:show={isShow}
 >
   <Container
     class="flex sm:items-center justify-between flex-col gap-5 sm:flex-row"
@@ -75,15 +64,3 @@
     </div>
   </Container>
 </header>
-
-<style>
-  header {
-    transform: translateY(-100%);
-    opacity: 0;
-
-    &:is(.show) {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-</style>

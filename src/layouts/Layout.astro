@@ -20,12 +20,8 @@ import "@assets/styles/global.css";
 
 <style>
   :root {
-    scroll-padding-top: calc(136px + 1rem);
+    scroll-padding-top: calc(var(--header-height) + 0.5rem);
     scroll-behavior: smooth;
-
-    @media screen and (min-width: 768px) {
-      scroll-padding-top: calc(88px + 1rem);
-    }
   }
 
   html,

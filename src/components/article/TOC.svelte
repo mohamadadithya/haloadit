@@ -32,7 +32,7 @@
         isIntersecting = entry.isIntersecting;
         isPassed = boundingRect.top < 0;
       },
-      { threshold: 0.5 }
+      { threshold: 1 }
     );
 
     if (ref) {

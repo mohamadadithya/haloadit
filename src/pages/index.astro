@@ -14,9 +14,10 @@ import { contentfulClient, type BlogPost } from "@/lib/contentful";
 import { formatDate } from "@/helpers";
 import { getPostTags } from "@/lib/post.render";
 import Head from "@/components/Head.astro";
+import { Icon } from "astro-icon/components";
 
 const limit = 3;
-const { items } = await contentfulClient.getEntries<BlogPost>({
+const { items, total } = await contentfulClient.getEntries<BlogPost>({
   content_type: "blogPost",
   limit,
 });
@@ -122,22 +123,19 @@ const posts = await Promise.all(
       posts.length > 0 && (
         <div class="py-8 md:py-10 min-h-dvh">
           <Container>
-            <div
-              class="flex items-center justify-between mb-5 flex-wrap gap-4"
-              id="writings"
-            >
-              <h2 class="section-title ">Tulisan Terbaru</h2>
-              {/* {total > limit && (
-                <a
-                  href="/writings"
-                  class="btn btn-primary btn-block xs:max-w-fit"
-                >
-                  Semua Tulisan
-                  <Icon name="mdi:arrow-right" class="size-5" />
-                </a>
-              )} */}
-            </div>
+            <h2 class="section-title mb-5" id="writings">
+              Tulisan Terbaru
+            </h2>
             {posts.length > 0 && <ArticleList {posts} />}
+            {total > limit && (
+              <a
+                href="/writings"
+                class="btn btn-primary btn-block xs:max-w-fit mt-8 sm:mt-10 btn-lg mx-auto flex"
+              >
+                Lihat Semua Tulisan
+                <Icon name="mdi:arrow-right" class="size-5" />
+              </a>
+            )}
           </Container>
         </div>
       )

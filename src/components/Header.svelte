@@ -1,7 +1,6 @@
 <script lang="ts">
   import siteConfig from "@site-config";
   import Container from "./Container.svelte";
-  import HeaderActions from "./HeaderActions.svelte";
   import { headerStore } from "@/constructors/header.constructor.svelte";
 
   const mainLinks = [
@@ -11,7 +10,7 @@
     },
     {
       label: "✍️ Tulisan",
-      href: "/#writings",
+      href: "/writings",
     },
     {
       label: "🗒️ Resume",

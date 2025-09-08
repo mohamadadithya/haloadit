@@ -1,0 +1,96 @@
+---
+export const prerender = false;
+
+import Head from "@/components/Head.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Layout from "@/layouts/Layout.astro";
+import Container from "@/components/Container.svelte";
+import siteConfig from "@/site.config";
+import ArticleListInfinite from "@/components/article/ArticleListInfinite.svelte";
+import ArticlesFilter from "@/components/article/ArticlesFilter.svelte";
+import {
+  contentfulClient,
+  toPostListItem,
+  type BlogPost,
+} from "@/lib/contentful";
+import type { PostListItem } from "@/types";
+
+const meta = {
+  title: `Kumpulan Tulisan - ${siteConfig.name}`,
+  description: `Baca berbagai tulisan Adit tentang teknologi, lifestyle, kreativitas, film, dan topik menarik lainnya. Temukan ide dan inspirasi terbaru setiap saat.`,
+  image: siteConfig.origin + "/og-images/writings.png",
+};
+
+const pageSize = 3; // atau 3 kalau mau sama persis seperti contohmu
+const skip = 0;
+
+// Ambil batch pertama di server (no spinner)
+const { items, total } = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogPost",
+  limit: pageSize,
+  skip,
+  order: ["-fields.date", "sys.id"],
+});
+
+const initialPosts: PostListItem[] = await Promise.all(
+  items.map(toPostListItem)
+);
+
+// Hitung nextSkip dari total (karena Contentful tidak kirim X-Next-Skip)
+const initialNextSkip =
+  items.length === pageSize && pageSize < total ? skip + items.length : null;
+
+// Optional: error awal (kalau perlu)
+const initialError: string | null = null;
+---
+
+<Layout>
+  <Head
+    slot="head"
+    seoData={{
+      title: meta.title,
+      description: meta.description,
+      openGraph: {
+        basic: {
+          type: "article",
+          title: meta.title,
+          image: meta.image,
+        },
+        optional: {
+          description: meta.description,
+        },
+      },
+      twitter: {
+        title: meta.title,
+        image: meta.image,
+        description: meta.description,
+      },
+    }}
+  />
+  <BaseLayout class="min-h-dvh">
+    <Container>
+      <div class="flex items-start gap-8">
+        <div class="w-full max-w-3.5xl lg:max-w-prose">
+          <div class="text-left mb-6">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl heading-font">
+              Kumpulan Tulisan
+            </h1>
+            <p class="mt-3 text-muted text-balance text-sm sm:text-base">
+              {meta.description}
+            </p>
+          </div>
+          <ArticleListInfinite
+            client:load
+            {pageSize}
+            {initialPosts}
+            {initialNextSkip}
+            {initialError}
+          />
+        </div>
+        <div class="w-full flex-1 hidden lg:block lg:sticky top-24">
+          <ArticlesFilter client:load />
+        </div>
+      </div>
+    </Container>
+  </BaseLayout>
+</Layout>

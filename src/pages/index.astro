@@ -9,10 +9,12 @@ import ScrollDownIcon from "@components/ScrollDownIcon.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import AboutSection from "@components/sections/About.astro";
 import { Schema } from "astro-seo-schema";
-import ArticleList from "@components/sections/ArticleList.astro";
-import { contentfulClient, type BlogPost } from "@/lib/contentful";
-import { formatDate } from "@/helpers";
-import { getPostTags } from "@/lib/post.render";
+import ArticleList from "@components/sections/ArticleList.svelte";
+import {
+  contentfulClient,
+  toPostListItem,
+  type BlogPost,
+} from "@/lib/contentful";
 import Head from "@/components/Head.astro";
 import { Icon } from "astro-icon/components";
 
@@ -22,23 +24,7 @@ const { items, total } = await contentfulClient.getEntries<BlogPost>({
   limit,
 });
 
-const posts = await Promise.all(
-  items.map(async (item) => {
-    const {
-      fields: { title, date, description, slug, tags: tagEntryLinks },
-    } = item;
-
-    const tags = await Promise.all(getPostTags(tagEntryLinks));
-
-    return {
-      title,
-      slug,
-      description,
-      tags,
-      date: formatDate(date),
-    };
-  })
-);
+const posts = await Promise.all(items.map(toPostListItem));
 ---
 
 <Layout>

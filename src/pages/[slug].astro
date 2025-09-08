@@ -1,5 +1,5 @@
 ---
-import TagList from "@components/article/TagList.astro";
+import TagList from "@components/article/TagList.svelte";
 import TOC from "@components/article/TOC.svelte";
 import Container from "@components/Container.svelte";
 import { contentfulClient, type BlogPost } from "@contentful";
@@ -77,7 +77,7 @@ const {
   slug,
   coverImage,
   updatedAt,
-  relatedPosts
+  relatedPosts,
 } = Astro.props;
 
 const meta = {
@@ -161,9 +161,7 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
   <BaseLayout class="min-h-dvh">
     <Container>
       <div class="text-left sm:text-center">
-        <h1
-          class="text-2xl sm:text-3xl md:text-4xl heading-font"
-        >
+        <h1 class="text-2xl sm:text-3xl md:text-4xl heading-font">
           {title}
         </h1>
         {
@@ -207,7 +205,11 @@ const publishedDate = isNotModified ? new Date(date) : new Date(updatedAt);
       <div class="flex flex-col-reverse lg:flex-row items-start gap-8 mt-10">
         <div class="w-full max-w-3.5xl lg:max-w-prose">
           <Article {content} {slug} />
-          {relatedPosts.length > 0 && <RelatedPostsCard class="mt-6" posts={relatedPosts} />}
+          {
+            relatedPosts.length > 0 && (
+              <RelatedPostsCard class="mt-6" posts={relatedPosts} />
+            )
+          }
           <div class="mt-6 border-t pt-8 border-dashed border-primary">
             <div class="mb-10 flex items-center gap-5 flex-wrap">
               <p class="font-medium">Bagikan artikel ini ke:</p>

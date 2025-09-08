@@ -13,6 +13,5 @@ interface PostListItem {
   tags: TagItem[];
   date: string;
 }
-[];
 
 export type { TOCItem, PostListItem };

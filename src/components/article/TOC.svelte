@@ -14,7 +14,7 @@
 
   let { items }: Props = $props();
 
-  const { isScrollingDown, height: headerHeight } = $derived(headerStore);
+  const { height: headerHeight } = $derived(headerStore);
 
   let ref = $state<HTMLElement>(),
     tocPanelMobileRef = $state<HTMLElement>(),
@@ -68,9 +68,7 @@
 <div
   bind:this={ref}
   transition:fly={{ y: 100, delay: 800 }}
-  class="toc flex-1 lg:sticky p-5 bg-base-200 w-full rounded-2xl shadow duration-500"
-  class:lg:top-24={!isScrollingDown}
-  class:lg:top-8={isScrollingDown}
+  class="toc flex-1 lg:sticky lg:top-24 p-5 bg-base-200 w-full rounded-2xl shadow duration-500"
 >
   {@render tocList()}
 </div>

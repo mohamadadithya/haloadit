@@ -17,7 +17,7 @@
   import Container from "../Container.svelte";
   import ArticlesFilter from "../article/ArticlesFilter.svelte";
   import { setContext } from "svelte";
-  import { SvelteURL } from "svelte/reactivity";
+  import { MediaQuery, SvelteURL } from "svelte/reactivity";
   import type { TagItem } from "@/lib/contentful";
 
   let {
@@ -49,23 +49,35 @@
   });
 
   setContext("article-list-context", context);
+
+  const largeScreen = new MediaQuery("(min-width: 768px)");
+  const maxScreen = new MediaQuery("(max-width: 767px)");
 </script>
 
 <Container>
   <div class="flex items-start gap-8">
-    <div class="w-full max-w-3.5xl lg:max-w-prose">
+    <div class="w-full max-w-3.5xl md:max-w-prose">
       <div class="text-left mb-6">
         <h1 class="text-2xl sm:text-3xl md:text-4xl heading-font">
           Kumpulan Tulisan
         </h1>
-        <p class="mt-3 text-muted text-balance text-sm sm:text-base">
+        <p class="mt-2 text-muted text-balance text-sm sm:text-base">
           {meta.description}
         </p>
       </div>
+      {#if maxScreen.current}
+        {@render filterSnippet("mb-5")}
+      {/if}
       <ArticleListInfinite />
     </div>
-    <div class="w-full flex-1 hidden lg:block lg:sticky top-24">
-      <ArticlesFilter />
-    </div>
+    {#if largeScreen.current}
+      {@render filterSnippet()}
+    {/if}
   </div>
 </Container>
+
+{#snippet filterSnippet(className = "")}
+  <div class="w-full flex-1 md:sticky top-24 {className}">
+    <ArticlesFilter />
+  </div>
+{/snippet}

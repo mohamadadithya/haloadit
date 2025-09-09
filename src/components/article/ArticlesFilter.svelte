@@ -85,7 +85,7 @@
 
 <div class="space-y-4">
   <form method="POST" onsubmit={handleSearch}>
-    <label class="input">
+    <label class="input w-full">
       <svg
         class="h-[1em] opacity-50"
         xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,10 @@
       />
     </label>
   </form>
-  <div aria-label="Sort articles" class="p-4 bg-base-200 rounded-2xl space-y-4">
+  <div
+    aria-label="Sort articles"
+    class="p-4 bg-base-200 rounded-2xl space-y-4 border border-primary border-dashed"
+  >
     <div aria-label="Sort articles">
       <p class="heading-font text-primary uppercase">Urutkan Secara</p>
       <div class="mt-3 grid grid-cols-2 gap-3">
@@ -123,7 +126,7 @@
               type="radio"
               id={value}
               name="sort"
-              class="radio"
+              class="radio checked:radio-primary"
               {value}
               bind:group={selectedSort}
             />

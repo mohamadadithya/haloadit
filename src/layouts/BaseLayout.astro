@@ -11,7 +11,7 @@ const { class: className } = Astro.props;
 
 <div class=`${className} overflow-clip` aria-label="Base Layout">
   <Header client:load />
-  <div class="py-8 md:py-10">
+  <div class="py-6 pre-sm:py-8">
     <slot />
   </div>
   <Footer />

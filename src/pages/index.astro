@@ -50,7 +50,7 @@ const posts = await Promise.all(items.map(toPostListItem));
       author: {
         "@type": "Person",
         name: siteConfig.author,
-        url: `${siteConfig.origin}/about`,
+        url: `${siteConfig.origin}/#about`,
       },
       publisher: {
         "@type": "Organization",
@@ -60,7 +60,7 @@ const posts = await Promise.all(items.map(toPostListItem));
       mainEntity: {
         "@type": "Person",
         name: siteConfig.author,
-        url: `${siteConfig.origin}/about`,
+        url: `${siteConfig.origin}/#about`,
       },
     }}
   />

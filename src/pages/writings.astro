@@ -14,6 +14,7 @@ import {
 } from "@/lib/contentful";
 import type { PostListItem } from "@/types";
 import { getAllTagItems, getSortOrder } from "@lib/contentful";
+import { Schema } from "astro-seo-schema";
 
 const meta = {
   title: `Kumpulan Tulisan - ${siteConfig.name}`,
@@ -73,6 +74,31 @@ const allTags = await getAllTagItems();
         title: meta.title,
         image: meta.image,
         description: meta.description,
+      },
+    }}
+  />
+  <Schema
+    slot="head"
+    item={{
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: meta.title,
+      url: astroUrl.href,
+      description: meta.description,
+      author: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/#about`,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.origin,
+      },
+      mainEntity: {
+        "@type": "Person",
+        name: siteConfig.author,
+        url: `${siteConfig.origin}/#about`,
       },
     }}
   />

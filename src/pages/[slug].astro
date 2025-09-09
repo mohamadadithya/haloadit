@@ -39,7 +39,7 @@ export async function getStaticPaths() {
         },
       } = item;
 
-      const tags = await Promise.all(getPostTags(tagEntryLinks));
+      const tags = await Promise.all(await getPostTags(tagEntryLinks));
       const relatedPosts = await Promise.all(
         getRelatedPosts(relatedPostEntryLinks)
       );

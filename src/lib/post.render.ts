@@ -2,6 +2,8 @@ import {
   contentfulClient,
   type AssetUnresolvedLink,
   type BlogPostUnresolvedLink,
+  type TagItem,
+  type TagSkeleton,
   type TagUnresolvedLink,
 } from "@contentful";
 import { BLOCKS, INLINES, type Document } from "@contentful/rich-text-types";
@@ -230,26 +232,72 @@ function getTOCAndHTML(html: string): {
 }
 
 /**
- * Retrieves an array of tag objects from an array of Contentful TagEntryLink objects.
+ * Splits an array into chunks of a given size.
  *
- * This function asynchronously fetches the tag entries using the Contentful client
- * and constructs an array of objects with `name` and `slug` properties for each tag.
- *
- * @param entryLinks - An array of `TagEntryLink` objects representing links to Contentful tag entries.
- * @returns A promise that resolves to an array of objects, each containing a `name` and `slug` property of a tag.
+ * @param arr - The array to be split.
+ * @param size - The size of each chunk.
+ * @returns An array of arrays, where each inner array is a chunk of the original array.
  */
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
 
-function getPostTags(entryLinks: TagUnresolvedLink[]) {
-  return Array.isArray(entryLinks)
-    ? entryLinks.map(async (tagEntryLink) => {
-        const tag = await contentfulClient.getEntry(tagEntryLink.sys.id);
+const TAG_CACHE = new Map<string, TagItem>();
 
-        return {
-          name: tag.fields.name as string,
-          slug: tag.fields.slug as string,
-        };
-      })
-    : [];
+/**
+ * Resolves a list of tag entry links into an array of `TagItem`.
+ *
+ * The function uses a cache to avoid querying the same tags multiple times.
+ * The cache is a simple map of `sys.id` to `TagItem`.
+ *
+ * @param entryLinks - The list of tag entry links to resolve.
+ * @returns An array of `TagItem` with the resolved tags, in the order of the
+ * input `entryLinks`.
+ */
+async function getPostTags(
+  entryLinks: TagUnresolvedLink[] | null | undefined
+): Promise<TagItem[]> {
+  if (!Array.isArray(entryLinks) || entryLinks.length === 0) return [];
+
+  const idsInOrder = entryLinks
+    .map((l) => l?.sys?.id)
+    .filter((id): id is string => Boolean(id));
+
+  if (idsInOrder.length === 0) return [];
+
+  const missing: string[] = [];
+  for (const id of new Set(idsInOrder)) {
+    if (!TAG_CACHE.has(id)) missing.push(id);
+  }
+
+  if (missing.length > 0) {
+    for (const part of chunk(missing, 100)) {
+      const { items } = await contentfulClient.getEntries<TagSkeleton>({
+        content_type: "tag",
+        "sys.id[in]": part,
+        include: 0,
+        limit: part.length,
+        select: ["fields.name", "fields.slug"],
+      });
+
+      for (const t of items) {
+        const name = t.fields.name as string | undefined;
+        const slug = t.fields.slug as string | undefined;
+        if (name && slug) TAG_CACHE.set(t.sys.id, { name, slug });
+      }
+    }
+  }
+
+  const result: TagItem[] = [];
+
+  for (const id of idsInOrder) {
+    const tag = TAG_CACHE.get(id);
+    if (tag) result.push(tag);
+  }
+
+  return result;
 }
 
 /**

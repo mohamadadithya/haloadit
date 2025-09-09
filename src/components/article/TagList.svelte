@@ -16,7 +16,7 @@
   <div class={cn("flex items-center gap-2", className)}>
     {#each tags as { name, slug, isActive, href }}
       <a
-        href={href ?? `/tags/${slug}`}
+        href={href ?? `/writings?sort=descending&tag=${slug}`}
         class="badge {isActive
           ? 'badge-primary'
           : 'badge-soft hover:badge-primary'}"

@@ -5,6 +5,7 @@
   import { watch } from "runed";
   import ArticleList from "../sections/ArticleList.svelte";
   import { type ArticleListContext } from "../sections/ArticleListWithFilter.svelte";
+  import type { SortOrder } from "@/lib/contentful";
 
   const articleListContext = getContext<ArticleListContext>(
     "article-list-context"
@@ -48,10 +49,7 @@
   let aborter: AbortController | null = $state(null);
 
   const sortMode = $derived(
-    currentUrl.searchParams.get("sort") as
-      | "ascending"
-      | "descending"
-      | undefined
+    currentUrl.searchParams.get("sort") as SortOrder | undefined
   );
 
   const searchQuery = $derived(currentUrl.searchParams.get("search") ?? "");

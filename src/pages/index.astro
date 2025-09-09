@@ -10,21 +10,17 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import AboutSection from "@components/sections/About.astro";
 import { Schema } from "astro-seo-schema";
 import ArticleList from "@components/sections/ArticleList.svelte";
-import {
-  contentfulClient,
-  toPostListItem,
-  type BlogPost,
-} from "@/lib/contentful";
+import { getPosts } from "@/lib/contentful";
 import Head from "@/components/Head.astro";
 import { Icon } from "astro-icon/components";
 
 const limit = 3;
-const { items, total } = await contentfulClient.getEntries<BlogPost>({
-  content_type: "blogPost",
-  limit,
+const { items: posts, total } = await getPosts({
+  pageSize: limit,
+  mode: "delivery",
+  sort: "descending",
+  skip: 0,
 });
-
-const posts = await Promise.all(items.map(toPostListItem));
 ---
 
 <Layout>

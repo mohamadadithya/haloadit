@@ -2,15 +2,7 @@ export const prerender = false;
 
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
-import {
-  contentfulClient,
-  toPostListItem,
-  getSortOrder,
-  type BlogPostSkeleton,
-  getTagIdFromSlug,
-} from "@/lib/contentful";
-
-import type { PostListItem } from "@/types";
+import { getPosts } from "@/lib/contentful";
 
 const QuerySchema = z.object({
   tag: z.string().optional(),
@@ -48,33 +40,15 @@ export const GET: APIRoute = async ({ request }) => {
     order,
   } = parsed.data;
 
-  const tagId = await getTagIdFromSlug(currentTag);
-
   try {
-    const query = {
-      content_type: "blogPost",
-      links_to_entry: tagId,
-      query: searchQuery,
-      limit,
+    const page = await getPosts({
+      sort: order,
+      search: searchQuery,
+      tag: currentTag,
+      pageSize: limit,
       skip,
-      include: 1,
-      order: getSortOrder(order),
-    } as const;
-
-    if (mode === "onlyPublished") {
-      (query as Record<string, unknown>)["sys.publishedAt[exists]"] = true;
-    } else if (mode === "onlyDrafts") {
-      (query as Record<string, unknown>)["sys.publishedAt[exists]"] = false;
-    }
-
-    const page = await contentfulClient.getEntries<
-      BlogPostSkeleton,
-      "blogPost"
-    >(query);
-
-    const items: PostListItem[] = await Promise.all(
-      page.items.map(toPostListItem)
-    );
+      mode,
+    });
 
     const hasMore = page.skip + page.items.length < page.total;
     const headers: Record<string, string> = {
@@ -87,7 +61,7 @@ export const GET: APIRoute = async ({ request }) => {
 
     if (hasMore) headers["X-Next-Skip"] = String(page.skip + page.items.length);
 
-    return new Response(JSON.stringify(items), { headers });
+    return new Response(JSON.stringify(page.items), { headers });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Server error";
 

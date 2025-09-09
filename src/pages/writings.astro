@@ -6,14 +6,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import ArticleListWithFilter from "@/components/sections/ArticleListWithFilter.svelte";
-import {
-  contentfulClient,
-  toPostListItem,
-  getTagIdFromSlug,
-  type BlogPost,
-} from "@/lib/contentful";
-import type { PostListItem } from "@/types";
-import { getAllTagItems, getSortOrder } from "@lib/contentful";
+import { getPosts, getAllTagItems, type SortOrder } from "@lib/contentful";
 import { Schema } from "astro-seo-schema";
 
 const meta = {
@@ -26,29 +19,28 @@ const pageSize = 10;
 const skip = 0;
 
 const { url: astroUrl } = Astro;
-const current = {
-  sort: astroUrl.searchParams.get("sort") ?? "descending",
+const current: {
+  sort: SortOrder;
+  search: string;
+  tag: string | null;
+} = {
+  sort: (astroUrl.searchParams.get("sort") ?? "descending") as SortOrder,
   search: astroUrl.searchParams.get("search") ?? "",
   tag: astroUrl.searchParams.get("tag"),
 };
 
-const tagId = await getTagIdFromSlug(current.tag);
-const { items, total } = await contentfulClient.getEntries<BlogPost>({
-  content_type: "blogPost",
-  links_to_entry: tagId,
-  query: current.search,
-  limit: pageSize,
+const { items: initialPosts, total } = await getPosts({
+  ...current,
+  pageSize,
   skip,
-  include: 1,
-  order: getSortOrder(current.sort),
+  tag: current.tag,
+  mode: "delivery",
 });
 
-const initialPosts: PostListItem[] = await Promise.all(
-  items.map(toPostListItem)
-);
-
 const initialNextSkip =
-  items.length === pageSize && pageSize < total ? skip + items.length : null;
+  initialPosts.length === pageSize && pageSize < total
+    ? skip + initialPosts.length
+    : null;
 
 const initialError: string | null = null;
 const allTags = await getAllTagItems();

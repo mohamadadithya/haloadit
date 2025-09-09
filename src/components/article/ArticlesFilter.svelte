@@ -3,8 +3,12 @@
   import { getContext } from "svelte";
   import type { ArticleListContext } from "../sections/ArticleListWithFilter.svelte";
   import TagList from "./TagList.svelte";
+  import type { SortOrder } from "@/lib/contentful";
 
-  const sortItems = [
+  const sortItems: {
+    label: string;
+    value: SortOrder;
+  }[] = [
     {
       label: "Terbaru",
       value: "descending",
@@ -23,8 +27,7 @@
   const { currentUrl: nonReactiveCurrentUrl } = articleListContext;
   const currentParams = {
     sort: nonReactiveCurrentUrl.searchParams.get("sort") as
-      | "ascending"
-      | "descending"
+      | SortOrder
       | undefined,
     search: nonReactiveCurrentUrl.searchParams.get("search") ?? "",
   };

@@ -6,7 +6,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import ArticleListWithFilter from "@/components/sections/ArticleListWithFilter.svelte";
-import { getPosts, getAllTagItems, type SortOrder } from "@lib/contentful";
+import { getPosts, type SortOrder } from "@lib/contentful";
 import { Schema } from "astro-seo-schema";
 
 const meta = {
@@ -43,7 +43,6 @@ const initialNextSkip =
     : null;
 
 const initialError: string | null = null;
-const allTags = await getAllTagItems();
 ---
 
 <Layout>
@@ -103,7 +102,6 @@ const allTags = await getAllTagItems();
       {pageSize}
       {meta}
       {astroUrl}
-      {allTags}
     />
   </BaseLayout>
 </Layout>

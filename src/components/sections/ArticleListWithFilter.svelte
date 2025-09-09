@@ -7,7 +7,6 @@
     initialNextSkip?: number | null;
     initialError?: string | null;
     currentUrl: SvelteURL;
-    allTags?: TagItem[];
   }
 </script>
 
@@ -18,7 +17,6 @@
   import ArticlesFilter from "../article/ArticlesFilter.svelte";
   import { setContext } from "svelte";
   import { MediaQuery, SvelteURL } from "svelte/reactivity";
-  import type { TagItem } from "@/lib/contentful";
 
   let {
     pageSize = 10,
@@ -27,7 +25,6 @@
     initialError = null,
     meta,
     astroUrl,
-    allTags = [],
   }: Omit<ArticleListContext, "mode" | "maxItemsTotal"> & {
     meta: {
       title: string;
@@ -45,7 +42,6 @@
     initialNextSkip,
     initialError,
     currentUrl: new SvelteURL(astroUrl),
-    allTags,
   });
 
   setContext("article-list-context", context);

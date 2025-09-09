@@ -115,7 +115,7 @@ const posts = await Promise.all(items.map(toPostListItem));
             {posts.length > 0 && <ArticleList {posts} />}
             {total > limit && (
               <a
-                href="/writings"
+                href="/writings?sort=descending"
                 class="btn btn-primary btn-block xs:max-w-fit mt-8 sm:mt-10 btn-lg mx-auto flex"
               >
                 Lihat Semua Tulisan

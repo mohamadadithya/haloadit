@@ -1,7 +1,13 @@
 import { formatDate } from "@/helpers";
 import type { PostListItem } from "@/types";
 import * as contentful from "contentful";
-import type { EntryFieldTypes, Entry, UnresolvedLink, Asset } from "contentful";
+import type {
+  EntryFieldTypes,
+  Entry,
+  UnresolvedLink,
+  Asset,
+  EntrySkeletonType,
+} from "contentful";
 import { getPostTags } from "./post.render";
 
 const contentfulClient = contentful.createClient({
@@ -53,6 +59,8 @@ interface MermaidBlock {
 interface TagItem {
   name: string;
   slug: PostListItem["slug"];
+  isActive?: boolean;
+  href?: string;
 }
 
 type CodeBlockEntry = Entry<CodeBlock>;
@@ -109,7 +117,60 @@ async function toPostListItem(
   };
 }
 
-export { contentfulClient, toPostListItem };
+interface TagSkeleton extends EntrySkeletonType {
+  contentTypeId: "tag";
+  fields: {
+    name: EntryFieldTypes.Symbol;
+    slug: EntryFieldTypes.Symbol;
+  };
+}
+
+async function getAllTagItems(): Promise<TagItem[]> {
+  const { items } = await contentfulClient.getEntries<TagSkeleton>({
+    content_type: "tag",
+    limit: 1000,
+    select: ["fields.name", "fields.slug"],
+  });
+
+  return items.map((t) => ({
+    name: t.fields.name,
+    slug: t.fields.slug as PostListItem["slug"],
+  }));
+}
+
+function getSortOrder(
+  currentSort: string
+): ("fields.date" | "-fields.date" | "sys.id" | "-sys.id")[] {
+  if (currentSort === "ascending") return ["fields.date", "sys.id"];
+  return ["-fields.date", "sys.id"];
+}
+
+async function getTagIdFromSlug(
+  slug: string | null | undefined
+): Promise<string | undefined> {
+  let tagId: string | undefined = undefined;
+
+  if (typeof slug === "string" && slug.length > 0) {
+    const { items: tags } = await contentfulClient.getEntries<TagSkeleton>({
+      content_type: "tag",
+      "fields.slug": slug,
+      limit: 1,
+      select: ["sys.id"],
+    });
+
+    tagId = tags[0]?.sys.id;
+  }
+
+  return tagId;
+}
+
+export {
+  contentfulClient,
+  toPostListItem,
+  getAllTagItems,
+  getSortOrder,
+  getTagIdFromSlug,
+};
 export type {
   CodeBlockEntry,
   MermaidBlockEntry,
@@ -123,4 +184,5 @@ export type {
   BlogPostSkeleton,
   BlogPostPage,
   BlogPostItem,
+  TagSkeleton,
 };

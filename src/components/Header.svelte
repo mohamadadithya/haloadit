@@ -10,7 +10,7 @@
     },
     {
       label: "✍️ Tulisan",
-      href: "/writings",
+      href: "/writings?sort=descending",
     },
     {
       label: "🗒️ Resume",

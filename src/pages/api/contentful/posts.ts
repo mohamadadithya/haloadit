@@ -2,59 +2,26 @@ export const prerender = false;
 
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
-import { type ChainModifiers, type LocaleCode } from "contentful";
 import {
   contentfulClient,
   toPostListItem,
+  getSortOrder,
   type BlogPostSkeleton,
+  getTagIdFromSlug,
 } from "@/lib/contentful";
 
-type CFOrder<S, M, L> = string;
 import type { PostListItem } from "@/types";
 
 const QuerySchema = z.object({
+  tag: z.string().optional(),
+  query: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(10),
   skip: z.coerce.number().int().min(0).default(0),
+  order: z.enum(["ascending", "descending"]).default("descending"),
   mode: z
     .enum(["delivery", "onlyPublished", "onlyDrafts", "none"])
     .default("delivery"),
 });
-
-const ORDER_FIELDS = ["date"] as const;
-
-type Modifiers = ChainModifiers;
-type Locale = LocaleCode;
-type AllowedOrder = CFOrder<BlogPostSkeleton, Modifiers, Locale>;
-const ORDER_WHITELIST: ReadonlySet<string> = new Set<string>([
-  "sys.id",
-  "-sys.id",
-  "sys.contentType.sys.id",
-  "-sys.contentType.sys.id",
-  // fields.* yang diizinkan
-  ...ORDER_FIELDS.map((k) => `fields.${k}`),
-  ...ORDER_FIELDS.map((k) => `-fields.${k}`),
-]);
-
-function isAllowedOrderToken(s: string): s is AllowedOrder {
-  return ORDER_WHITELIST.has(s);
-}
-
-function getRawOrderParams(url: URL): string[] {
-  const multi = url.searchParams.getAll("order");
-  const csv = multi.length
-    ? multi.join(",")
-    : (url.searchParams.get("order") ?? "");
-  return csv
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-function parseOrder(url: URL): AllowedOrder[] {
-  const raw = getRawOrderParams(url);
-  const effective = raw.length ? raw : ["-fields.date", "sys.id"];
-  return effective.filter(isAllowedOrderToken);
-}
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
@@ -64,6 +31,7 @@ export const GET: APIRoute = async ({ request }) => {
   };
 
   const parsed = QuerySchema.safeParse(Object.fromEntries(url.searchParams));
+
   if (!parsed.success) {
     return new Response(JSON.stringify({ error: parsed.error.flatten() }), {
       status: 400,
@@ -71,18 +39,26 @@ export const GET: APIRoute = async ({ request }) => {
     });
   }
 
-  const { limit, skip, mode } = parsed.data;
-  const order = parseOrder(url);
+  const {
+    limit,
+    skip,
+    mode,
+    query: searchQuery,
+    tag: currentTag,
+    order,
+  } = parsed.data;
+
+  const tagId = await getTagIdFromSlug(currentTag);
 
   try {
     const query = {
       content_type: "blogPost",
+      links_to_entry: tagId,
+      query: searchQuery,
       limit,
       skip,
       include: 1,
-      order: (order.length > 0 ? order : ["-fields.date", "sys.id"]).filter(
-        (o): o is string => typeof o === "string"
-      ),
+      order: getSortOrder(order),
     } as const;
 
     if (mode === "onlyPublished") {

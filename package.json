@@ -43,7 +43,7 @@
     "@astro-kits/google-analytics": "^0.1.0",
     "@astrojs/partytown": "^2.1.4",
     "@contentful/rich-text-html-renderer": "^17.0.0",
-    "@contentful/rich-text-types": "^17.2.0",
+    "@contentful/rich-text-types": "17.2.0",
     "@unpic/astro": "^1.0.0",
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-og-canvas": "^0.7.0",
@@ -58,7 +58,12 @@
     "tailwind-merge": "^3.2.0",
     "zastro-service-worker": "^0.0.3"
   },
-   "overrides": {
+  "overrides": {
     "@contentful/rich-text-types": "17.2.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@contentful/rich-text-types": "17.2.0"
+    }
   }
 }

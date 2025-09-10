@@ -82,8 +82,7 @@ const {
 
 const meta = {
   title: `${title} — ${siteConfig.name}`,
-  image:
-    coverImage?.src || `${Astro.url.origin}${siteConfig.defaultBannerPath}`,
+  image: coverImage?.src || `${Astro.url.origin}/api/open-graph/${slug}.png`,
 };
 
 const isNotModified =

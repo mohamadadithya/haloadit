@@ -195,6 +195,8 @@
     lazy: true,
   });
 
+  let containerEl = $state<HTMLDivElement | null>(null);
+
   watch(
     () => currentUrl.href,
     (prev, curr) => {
@@ -224,8 +226,7 @@
         ) {
           // Sort mode changed, reset the list
           reset();
-          // Scroll to top
-          scrollTo({ top: 0, behavior: "smooth" });
+          containerEl?.scrollIntoView({ behavior: "smooth" });
         }
       }
     },
@@ -233,7 +234,7 @@
   );
 </script>
 
-<div class="min-h-96">
+<div class="min-h-96" bind:this={containerEl}>
   {#if posts.length === 0 && !isLoading && !errorMessage}
     <p class="text-muted">Tidak ada tulisan ditemukan.</p>
   {:else}

@@ -31,7 +31,6 @@ export default defineConfig({
   }), zserviceWorker()],
   vite: {
     plugins: [tailwindcss()],
-    assetsInclude: ['**/*.wasm']
   },
   adapter: vercel(),
   env: {

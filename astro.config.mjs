@@ -14,6 +14,8 @@ import { imageService } from '@unpic/astro/service';
 
 import zserviceWorker from 'zastro-service-worker';
 
+import netlify from '@astrojs/netlify';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://haloadit.com',
@@ -32,7 +34,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  adapter: vercel(),
+  adapter: netlify(),
   env: {
     schema: {
       GA_ID: envField.string({ context: 'client', access: 'public' }),

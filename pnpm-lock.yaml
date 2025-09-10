@@ -18,8 +18,8 @@ importers:
         specifier: ^17.0.0
         version: 17.1.2
       '@contentful/rich-text-types':
-        specifier: ^17.0.0
-        version: 17.2.1
+        specifier: ^17.2.0
+        version: 17.2.0
       '@unpic/astro':
         specifier: ^1.0.0
         version: 1.0.1(astro@5.13.7(@types/node@24.3.1)(@vercel/functions@2.2.13)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@2.79.2)(terser@5.44.0)(typescript@5.9.2)(yaml@2.8.1))
@@ -765,6 +765,10 @@ packages:
 
   '@contentful/rich-text-types@16.8.5':
     resolution: {integrity: sha512-q18RJuJCOuYveGiCIjE5xLCQc5lZ3L2Qgxrlg/H2YEobDFqdtmklazRi1XwEWaK3tMg6yVXBzKKkQfLB4qW14A==}
+    engines: {node: '>=6.0.0'}
+
+  '@contentful/rich-text-types@17.2.0':
+    resolution: {integrity: sha512-XAfVYrYkvT8573KPxWujl96ZyMZSjON6l4FK2kBT1Si0nc0b/BVkCfBn269/D3t4szSdwt7ui380aB7viAsB1Q==}
     engines: {node: '>=6.0.0'}
 
   '@contentful/rich-text-types@17.2.1':
@@ -6844,6 +6848,14 @@ snapshots:
       - babel-plugin-macros
 
   '@contentful/rich-text-types@16.8.5': {}
+
+  '@contentful/rich-text-types@17.2.0':
+    dependencies:
+      '@lingui/core': 5.4.1
+      is-plain-obj: 3.0.0
+    transitivePeerDependencies:
+      - '@lingui/babel-plugin-lingui-macro'
+      - babel-plugin-macros
 
   '@contentful/rich-text-types@17.2.1':
     dependencies:

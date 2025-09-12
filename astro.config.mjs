@@ -31,11 +31,21 @@ export default defineConfig({
   }), zserviceWorker()],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      // Prevent prebundling server-only libs for the browser graph
+      exclude: ['@sentry/node', '@opentelemetry/api', '@opentelemetry/instrumentation'],
+    },
+    ssr: {
+      target: 'node',
+      // These libs try to pull Node internals; keep them bundled for SSR
+      noExternal: [
+        '@sentry/node',
+        /^@opentelemetry\//,
+      ],
+    },
   },
   output: 'server',
-  adapter: netlify({
-    edgeMiddleware: true
-  }),
+  adapter: netlify({}),
   env: {
     schema: {
       GA_ID: envField.string({ context: 'client', access: 'public' }),
@@ -48,5 +58,5 @@ export default defineConfig({
       placeholder: 'blurhash',
       fallbackService: 'astro'
     })
-  }
+  },
 });

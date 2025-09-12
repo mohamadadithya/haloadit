@@ -1,3 +1,4 @@
-[[edge_functions]]
-path = "/api/contentful/posts"
-function = "posts"
+[functions]
+node_bundler = "esbuild" # default, but set explicitly
+# Do NOT mark Node core as external; leave external_node_modules empty or only real deps
+# external_node_modules = ["some-lib"]  # <- avoid listing core modules here

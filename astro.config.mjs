@@ -10,7 +10,7 @@ import playformInline from '@playform/inline';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import { imageService } from '@unpic/astro/service';
-import netlify from "@astrojs/netlify/functions";
+import netlify from "@astrojs/netlify";
 
 import zserviceWorker from 'zastro-service-worker';
 

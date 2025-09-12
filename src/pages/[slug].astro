@@ -19,6 +19,8 @@ import Article from "@/components/article/Article.astro";
 import { getRelatedPosts } from "@lib/post.render";
 import RelatedPostsCard from "@/components/article/RelatedPostsCard.astro";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const entries = await contentfulClient.getEntries<BlogPost>({
     content_type: "blogPost",

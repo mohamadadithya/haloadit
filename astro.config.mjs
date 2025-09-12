@@ -2,7 +2,6 @@
 import { defineConfig, envField } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
-import vercel from '@astrojs/vercel';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
@@ -11,10 +10,9 @@ import playformInline from '@playform/inline';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import { imageService } from '@unpic/astro/service';
+import netlify from "@astrojs/netlify/functions";
 
 import zserviceWorker from 'zastro-service-worker';
-
-import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,7 +32,10 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  adapter: netlify(),
+  output: 'server',
+  adapter: netlify({
+    edgeMiddleware: true
+  }),
   env: {
     schema: {
       GA_ID: envField.string({ context: 'client', access: 'public' }),

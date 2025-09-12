@@ -6,8 +6,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import ArticleListWithFilter from "@/components/sections/ArticleListWithFilter.svelte";
-import { getPosts, type SortOrder } from "@lib/contentful";
+import { type SortOrder } from "@lib/contentful";
 import { Schema } from "astro-seo-schema";
+import type { PostListItem } from "@/types";
 
 const meta = {
   title: `Kumpulan Tulisan - ${siteConfig.name}`,
@@ -19,30 +20,47 @@ const pageSize = 10;
 const skip = 0;
 
 const { url: astroUrl } = Astro;
-const current: {
-  sort: SortOrder;
-  search: string;
-  tag: string | null;
-} = {
-  sort: (astroUrl.searchParams.get("sort") ?? "descending") as SortOrder,
+const current = {
+  sort: (astroUrl.searchParams.get("sort") as SortOrder) ?? "descending",
   search: astroUrl.searchParams.get("search") ?? "",
   tag: astroUrl.searchParams.get("tag"),
 };
 
-const { items: initialPosts, total } = await getPosts({
-  ...current,
-  pageSize,
-  skip,
-  tag: current.tag,
+const params = new URLSearchParams({
+  query: current.search,
+  limit: String(pageSize),
+  skip: String(skip),
+  tag: current.tag ?? "",
+  order: current.sort ?? "descending",
   mode: "delivery",
 });
 
-const initialNextSkip =
-  initialPosts.length === pageSize && pageSize < total
-    ? skip + initialPosts.length
-    : null;
+const run = async () => {
+  try {
+    const res = await fetch(
+      `${siteConfig.origin}/api/contentful/posts?${params.toString()}`
+    );
 
-const initialError: string | null = null;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const items = (await res.json()) as PostListItem[];
+
+    const totalHeader =
+      res.headers.get("X-Total") ?? res.headers.get("X-Total-Count");
+
+    const total = Number(totalHeader ?? 0);
+
+    return { items, total };
+  } catch (e: unknown) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      return { items: [] as PostListItem[], total: 0 };
+    }
+
+    throw e;
+  }
+};
+
+const { items: initialPosts } = await run();
 ---
 
 <Layout>
@@ -97,8 +115,6 @@ const initialError: string | null = null;
     <ArticleListWithFilter
       client:load
       {initialPosts}
-      {initialNextSkip}
-      {initialError}
       {pageSize}
       {meta}
       {astroUrl}

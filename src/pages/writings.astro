@@ -1,12 +1,14 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 import Head from "@/components/Head.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import ArticleListWithFilter from "@/components/sections/ArticleListWithFilter.svelte";
+import { getPosts, type SortOrder } from "@lib/contentful";
 import { Schema } from "astro-seo-schema";
+import type { PostListItem } from "@/types";
 
 const meta = {
   title: `Kumpulan Tulisan - ${siteConfig.name}`,
@@ -15,8 +17,33 @@ const meta = {
 };
 
 const pageSize = 10;
+const skip = 0;
 
 const { url: astroUrl } = Astro;
+const current: {
+  sort: SortOrder;
+  search: string;
+  tag: string | null;
+} = {
+  sort: (astroUrl.searchParams.get("sort") ?? "descending") as SortOrder,
+  search: astroUrl.searchParams.get("search") ?? "",
+  tag: astroUrl.searchParams.get("tag"),
+};
+
+const { items: initialPosts, total } = await getPosts({
+  ...current,
+  pageSize,
+  skip,
+  tag: current.tag,
+  mode: "delivery",
+});
+
+const initialNextSkip =
+  initialPosts.length === pageSize && pageSize < total
+    ? skip + initialPosts.length
+    : null;
+
+const initialError: string | null = null;
 ---
 
 <Layout>
@@ -68,6 +95,14 @@ const { url: astroUrl } = Astro;
     }}
   />
   <BaseLayout class="min-h-dvh">
-    <ArticleListWithFilter client:load {pageSize} {meta} {astroUrl} />
+    <ArticleListWithFilter
+      client:load
+      {initialPosts}
+      {initialNextSkip}
+      {initialError}
+      {pageSize}
+      {meta}
+      {astroUrl}
+    />
   </BaseLayout>
 </Layout>
